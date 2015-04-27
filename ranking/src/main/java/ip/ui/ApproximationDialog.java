@@ -9,6 +9,7 @@ import ip.network.MultiLayerNetwork;
 import ip.network.exceptions.CannotCreateNetworkException;
 import ip.network.factory.MultiLayerNetworkFactory;
 import ip.network.input.InputRow;
+import ip.network.input.RandomInputProvider;
 import ip.network.input.TrainingDataProvider;
 import ip.network.neuron.AbstractNeuron;
 import ip.network.strategy.bp.BackPropagationStrategy;
@@ -157,23 +158,25 @@ public class ApproximationDialog extends javax.swing.JDialog {
         }
 
         try {
-            JFileChooser trainingDataFileChooser = new JFileChooser(".");
-            int result = trainingDataFileChooser.showOpenDialog(this);
+//            JFileChooser trainingDataFileChooser = new JFileChooser(".");
+//            int result = trainingDataFileChooser.showOpenDialog(this);
+//
+//            if (result == JFileChooser.CANCEL_OPTION) {
+//                return;
+//            }
+//
+//            File chosenFile = trainingDataFileChooser.getSelectedFile();
+//
+//            TrainingDataProvider provider = new TrainingDataProvider(
+//                    chosenFile, inputNeurons, outputNeurons, " ");
 
-            if (result == JFileChooser.CANCEL_OPTION) {
-                return;
-            }
-
-            File chosenFile = trainingDataFileChooser.getSelectedFile();
+            RandomInputProvider provider = new RandomInputProvider(100);
+            List<InputRow> trainingData = provider.provideAllRows();
 
             int maxEpochNum = learningParamsInputPanel.getMaximumEpochNumber();
             double learningRate = learningParamsInputPanel.getLearningRate();
             double momentumFactor = learningParamsInputPanel.getMomentumFactor();
             double error = learningParamsInputPanel.getErrorThreshold();
-
-            TrainingDataProvider provider = new TrainingDataProvider(
-                    chosenFile, inputNeurons, outputNeurons, " ");
-            List<InputRow> trainingData = provider.provideAllRows();
 
             ThresholdEpochNetworkTrainer trainer
                     = new ThresholdEpochNetworkTrainer(maxEpochNum, error, learningRate, momentumFactor);
