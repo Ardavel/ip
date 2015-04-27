@@ -52,7 +52,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
         super(parent, modal);
         generator = new PlotGenerator();
         initComponents();
-        
+
         setTitle("Rankingowanie kierowców");
 
         networkCreationParamsPanel.fixNetworkInputsField(1);
@@ -205,9 +205,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
                     .generateName();
 
             generator.generateResultsChart(resultsPlotData, plotFileName);
-
-            ResultsDialog results = new ResultsDialog((Frame) this.getParent(), trainingData, networkResults);
-            results.setVisible(true);
         } catch (EmptyInputFieldException | IOException ex) {
             Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -245,9 +242,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
             resultsPlotData.setPlotName("Approximation");
 
             generator.generateResultsChart(resultsPlotData);
-
-            ResultsDialog results = new ResultsDialog((Frame) this.getParent(), trainingData, networkResults);
-            results.setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
