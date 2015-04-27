@@ -215,6 +215,13 @@ public class ApproximationDialog extends javax.swing.JDialog {
         trainingData.stream().forEach(
                 (InputRow row) -> networkResults.add(network.runNetwork(row.getValues()))
         );
+
+        double errorSum = 0;
+        for (int i = 0; i < trainingData.size(); ++i) {
+            errorSum += Math.abs(networkResults.get(i)[0] - trainingData.get(i).getExpectedOutput()[0]);
+        }
+        
+        System.out.println("Average absolute error: " + errorSum / trainingData.size());
     }//GEN-LAST:event_testNetworkButtonActionPerformed
 
     private void createNetworkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createNetworkButtonActionPerformed
