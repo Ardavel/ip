@@ -8,7 +8,6 @@ package ip.ui;
 import ip.network.MultiLayerNetwork;
 import ip.network.exceptions.CannotCreateNetworkException;
 import ip.network.factory.MultiLayerNetworkFactory;
-import ip.network.input.ClassificationDataProvider;
 import ip.network.input.InputRow;
 import ip.network.input.RandomInputProvider;
 import ip.network.input.TrainingDataProvider;
@@ -53,6 +52,8 @@ public class ApproximationDialog extends javax.swing.JDialog {
         super(parent, modal);
         generator = new PlotGenerator();
         initComponents();
+        
+        setTitle("Rankingowanie kierowców");
 
         networkCreationParamsPanel.fixNetworkInputsField(1);
         networkCreationParamsPanel.fixNetworkOutputField(1);
@@ -85,7 +86,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
         setTitle("Aproksymacja");
 
         headerLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        headerLabel.setText("Aproksymacja");
+        headerLabel.setText("Sieć neuronowa");
         headerPanel.add(headerLabel);
 
         trainNetworkButton.setText("Trenuj sieć");
@@ -208,7 +209,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
             ResultsDialog results = new ResultsDialog((Frame) this.getParent(), trainingData, networkResults);
             results.setVisible(true);
         } catch (EmptyInputFieldException | IOException ex) {
-            Logger.getLogger(ClassificationDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_trainNetworkButtonActionPerformed
 
@@ -272,10 +273,9 @@ public class ApproximationDialog extends javax.swing.JDialog {
             trainNetworkButton.setEnabled(true);
             testNetworkButton.setEnabled(true);
         } catch (EmptyInputFieldException | CannotCreateNetworkException ex) {
-            Logger.getLogger(TransformationDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
-        new RandomInputProvider(100);
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
 
