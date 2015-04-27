@@ -25,7 +25,7 @@ public class RandomInputProvider implements InputProvider {
 
     Random random = new Random();
 
-    private int[] weights = new int[]{5, 0, 5, 15, 17, 20, 26, 34, 45, 60, 78, 100};
+    private int[] values = new int[]{5, 0, 5, 15, 17, 20, 26, 34, 45, 60, 78, 100};
 
     protected RandomInputProvider() {
     }
@@ -95,12 +95,10 @@ public class RandomInputProvider implements InputProvider {
                 outputs[0] += inputs[i] * 0.1;
             }
             double sum = 0;
-            double weightsSum = 0;
             for (int i = 2; i < inputSize; i++) {
-                sum += inputs[i] * weights[i - 2];
-                weightsSum += weights[i - 2];
+                sum += inputs[i] * values[i - 2];
             }
-            outputs[0] += sum / weightsSum;
+            outputs[0] += sum / 8;
             System.out.println(outputs[0]);
             dataset1.setExpectedOutput(outputs);
         }
