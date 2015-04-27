@@ -25,11 +25,14 @@ public class RandomInputProvider implements InputProvider {
 
     Random random = new Random();
 
+    private int[] weights = new int[]{5, 0, 5, 15, 17, 20, 26, 34, 45, 60, 78, 100};
+
     protected RandomInputProvider() {
     }
 
     public RandomInputProvider(int dataSize) {
         dataset = new ArrayList<>(generateRandomInput(dataSize));
+        calculateAverageCombustion();
         normalize();
     }
 
@@ -72,14 +75,34 @@ public class RandomInputProvider implements InputProvider {
         for (InputRow dataset1 : dataset) {
             double length = 0;
             double[] inputs = dataset1.getValues();
-            for(int j=0; j<inputSize; j++){
+            for (int j = 0; j < inputSize; j++) {
                 length += inputs[j] * inputs[j];
             }
             length = Math.sqrt(length);
-            for(int j=0; j<inputSize; j++){
+            for (int j = 0; j < inputSize; j++) {
                 inputs[j] = inputs[j] / length;
 //                System.out.println(j + " " + inputs[j]);
             }
+        }
+    }
+
+    private void calculateAverageCombustion() {
+        for (InputRow dataset1 : dataset) {
+            double[] outputs = new double[1];
+            outputs[0] = 4.4;
+            double[] inputs = dataset1.getValues();
+            for (int i = 0; i < 2; i++) {
+                outputs[0] += inputs[i] * 0.1;
+            }
+            double sum = 0;
+            double weightsSum = 0;
+            for (int i = 2; i < inputSize; i++) {
+                sum += inputs[i] * weights[i - 2];
+                weightsSum += weights[i - 2];
+            }
+            outputs[0] += sum / weightsSum;
+            System.out.println(outputs[0]);
+            dataset1.setExpectedOutput(outputs);
         }
     }
 
