@@ -187,66 +187,34 @@ public class ApproximationDialog extends javax.swing.JDialog {
                     .generateName();
 
             generator.generateErrorChart(meanSquaredError, plotFileName);
-
-            List<double[]> networkResults = new ArrayList<>(trainingData.size());
-            trainingData.stream().forEach(
-                    (InputRow row) -> networkResults.add(network.runNetwork(row.getValues()))
-            );
-
-            ResultsPlotData resultsPlotData = new ResultsPlotData();
-            resultsPlotData.setInputs(trainingData);
-            resultsPlotData.setOutputs(networkResults);
-            resultsPlotData.setPlotName("Approximation");
-
-            plotFileName = new PlotNamer().setBaseName("trainingResult")
-                    .setEpochs(meanSquaredError.size())
-                    .setHiddenNeurons(hiddenNeurons)
-                    .setLearningRate(learningRate)
-                    .setMomentumFactor(momentumFactor)
-                    .generateName();
-
-            generator.generateResultsChart(resultsPlotData, plotFileName);
         } catch (EmptyInputFieldException | IOException ex) {
             Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_trainNetworkButtonActionPerformed
 
     private void testNetworkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testNetworkButtonActionPerformed
-        try {
-            if (network == null) {
-                return;
-            }
-
-            JFileChooser trainingDataFileChooser = new JFileChooser(".");
-            int result = trainingDataFileChooser.showOpenDialog(this);
-
-            if (result == JFileChooser.CANCEL_OPTION) {
-                return;
-            }
-
-            File chosenFile = trainingDataFileChooser.getSelectedFile();
-
-            TrainingDataProvider provider = new TrainingDataProvider(
-                    chosenFile, inputNeurons, outputNeurons, " ");
-            List<InputRow> trainingData = provider.provideAllRows();
-
-            List<double[]> networkResults = new ArrayList<>(trainingData.size());
-            trainingData.stream().forEach(
-                    (InputRow row) -> networkResults.add(network.runNetwork(row.getValues()))
-            );
-
-            ResultsPlotData resultsPlotData = new ResultsPlotData();
-            resultsPlotData.setInputs(trainingData);
-            resultsPlotData.setOutputs(networkResults);
-            resultsPlotData.setxAxisLabel("arguments");
-            resultsPlotData.setyAxisLabel("function values");
-            resultsPlotData.setPlotName("Approximation");
-
-            generator.generateResultsChart(resultsPlotData);
-        } catch (IOException ex) {
-            Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+        if (network == null) {
+            return;
         }
+
+//            JFileChooser trainingDataFileChooser = new JFileChooser(".");
+//            int result = trainingDataFileChooser.showOpenDialog(this);
+//
+//            if (result == JFileChooser.CANCEL_OPTION) {
+//                return;
+//            }
+//
+//            File chosenFile = trainingDataFileChooser.getSelectedFile();
+//
+//            TrainingDataProvider provider = new TrainingDataProvider(
+//                    chosenFile, inputNeurons, outputNeurons, " ");
+        RandomInputProvider provider = new RandomInputProvider(100);
+        List<InputRow> trainingData = provider.provideAllRows();
+
+        List<double[]> networkResults = new ArrayList<>(trainingData.size());
+        trainingData.stream().forEach(
+                (InputRow row) -> networkResults.add(network.runNetwork(row.getValues()))
+        );
     }//GEN-LAST:event_testNetworkButtonActionPerformed
 
     private void createNetworkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createNetworkButtonActionPerformed
