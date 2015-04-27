@@ -10,6 +10,7 @@ import ip.network.exceptions.CannotCreateNetworkException;
 import ip.network.factory.MultiLayerNetworkFactory;
 import ip.network.input.ClassificationDataProvider;
 import ip.network.input.InputRow;
+import ip.network.input.RandomInputProvider;
 import ip.network.input.TrainingDataProvider;
 import ip.network.neuron.AbstractNeuron;
 import ip.network.strategy.bp.BackPropagationStrategy;
@@ -274,6 +275,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
             Logger.getLogger(TransformationDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
+        new RandomInputProvider(100);
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
 
