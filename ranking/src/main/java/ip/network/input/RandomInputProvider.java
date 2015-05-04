@@ -99,7 +99,6 @@ public class RandomInputProvider implements InputProvider {
                 sum += inputs[i] * values[i - 2];
             }
             outputs[0] += sum / 8;
-            System.out.println(outputs[0]);
             dataset1.setExpectedOutput(outputs);
         }
     }
