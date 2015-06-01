@@ -59,10 +59,10 @@ public class Architecture implements Serializable {
     @ManyToOne(optional = false)
     private Vehicle vehicle;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "architecture")
     private List<Driver> driverList;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "architecture")
     private List<Run> runList;
 
     public Architecture() {

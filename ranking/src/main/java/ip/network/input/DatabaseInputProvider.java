@@ -21,7 +21,7 @@ public class DatabaseInputProvider implements InputProvider {
 
     private static final int OUTPUTS_NUM = 1;
 
-    private RunJpaController runJpaController;
+    private RunJpaController runJpaController = new RunJpaController();
 
     private int nextRow = 0;
 
