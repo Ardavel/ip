@@ -1,7 +1,6 @@
 package ip.ui;
 
 import ip.entities.Driver;
-import ip.entities.Run;
 import ip.facades.DriverJpaController;
 import ip.mock.RandomRunsGenerator;
 import ip.network.MultiLayerNetwork;
@@ -10,7 +9,6 @@ import ip.network.factory.MultiLayerNetworkFactory;
 import ip.network.input.DatabaseInputProvider;
 import ip.network.input.InputProvider;
 import ip.network.input.InputRow;
-import ip.network.input.RandomInputProvider;
 import ip.network.neuron.AbstractNeuron;
 import ip.network.strategy.bp.BackPropagationStrategy;
 import ip.network.strategy.bp.IdentityActivationBPS;
@@ -48,13 +46,13 @@ public class NetworkDialog extends javax.swing.JDialog {
     private int inputNeurons;
 
     private int outputNeurons;
-    
+
     private final Random random = new Random();
 
     private final RunHandler runHandler = new RunHandler();
 
     private final RandomRunsGenerator randomRunsGenerator = new RandomRunsGenerator();
-    
+
     private final DriverJpaController driverFacade = new DriverJpaController();
 
     public NetworkDialog(java.awt.Frame parent, boolean modal) {
@@ -66,7 +64,7 @@ public class NetworkDialog extends javax.swing.JDialog {
 
         networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
-        learningParamsInputPanel.setDefaultLearningRate(0.1);
+        networkCreationParamsPanel.setNetworkHiddenField(12);
 
         initializeSafeDrivingDistribution();
     }
@@ -293,6 +291,8 @@ public class NetworkDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
     private void generateRunsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRunsButtonActionPerformed
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
         List<SummarizedRun> randomRuns = randomRunsGenerator.generateRandomSummarizedRuns(Integer.parseInt(numberOfRuns.getText()));
 
         for (SummarizedRun summarizedRun : randomRuns) {
@@ -300,6 +300,9 @@ public class NetworkDialog extends javax.swing.JDialog {
             Driver randomDriver = drivers.get(random.nextInt(drivers.size()));
             runHandler.handleRun(summarizedRun, randomDriver, safeDrivingDistribution);
         }
+
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        JOptionPane.showMessageDialog(this, "Trasy zostały wygenerowane", "Wygenerowano trasy", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_generateRunsButtonActionPerformed
 
     private void rankingButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rankingButonActionPerformed

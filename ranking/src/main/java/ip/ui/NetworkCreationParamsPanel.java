@@ -23,12 +23,17 @@ public class NetworkCreationParamsPanel extends javax.swing.JPanel {
 
     public void fixNetworkInputsField(int value) {
         inputNeuronsInput.setText(String.valueOf(value));
-        inputNeuronsInput.setEnabled(true);
+        inputNeuronsInput.setEnabled(false);
     }
 
     public void fixNetworkOutputField(int value) {
         outputNeuronsInput.setText(String.valueOf(value));
         outputNeuronsInput.setEnabled(false);
+    }
+    
+    public void setNetworkHiddenField(int value) {
+        hiddenNeuronsInput.setText(String.valueOf(value));
+        hiddenNeuronsInput.setEnabled(true);
     }
 
     public int getNetworkInputsNum() throws EmptyInputFieldException {
