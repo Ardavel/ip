@@ -271,8 +271,9 @@ public class NetworkDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
     private void generateRunsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRunsButtonActionPerformed
-        // here given number of runs should be generated, persisted in the DB
-        // for each run driver should be awarded points for safety and ecology
+        // generate a list of runs using RandomRunsGenerator
+        // iterate over them, assign random drivers and handle each run with
+        // RunHandler
     }//GEN-LAST:event_generateRunsButtonActionPerformed
 
     private void rankingButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rankingButonActionPerformed

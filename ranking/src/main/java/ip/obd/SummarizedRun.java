@@ -1,5 +1,6 @@
 package ip.obd;
 
+import ip.entities.Run;
 import java.util.Date;
 
 /**
@@ -16,6 +17,13 @@ public class SummarizedRun {
     
     private Date endingTime;
 
+    public Run convertToRun() {
+        Run run = new Run();
+        run.setAvgImap(averageIMAP);
+        run.setEndingTime(endingTime);
+        return run;
+    }
+    
     public double getAverageIMAP() {
         return averageIMAP;
     }
