@@ -10,7 +10,6 @@ import ip.network.exceptions.CannotCreateNetworkException;
 import ip.network.factory.MultiLayerNetworkFactory;
 import ip.network.input.InputRow;
 import ip.network.input.RandomInputProvider;
-import ip.network.input.TrainingDataProvider;
 import ip.network.neuron.AbstractNeuron;
 import ip.network.strategy.bp.BackPropagationStrategy;
 import ip.network.strategy.bp.IdentityActivationBPS;
@@ -18,14 +17,10 @@ import ip.network.training.ThresholdEpochNetworkTrainer;
 import ip.ui.exceptions.EmptyInputFieldException;
 import ip.ui.plot.PlotGenerator;
 import ip.ui.plot.PlotNamer;
-import ip.ui.plot.ResultsPlotData;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -54,9 +49,9 @@ public class ApproximationDialog extends javax.swing.JDialog {
 
         setTitle("Rankingowanie kierowców");
 
-        networkCreationParamsPanel.fixNetworkInputsField(1);
+        networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
-        learningParamsInputPanel.setDefaultLearningRate(0.4);
+        learningParamsInputPanel.setDefaultLearningRate(0.1);
     }
 
     /**
@@ -74,7 +69,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
         downSeparator = new javax.swing.JSeparator();
         buttonPanel = new javax.swing.JPanel();
         trainNetworkButton = new javax.swing.JButton();
-        testNetworkButton = new javax.swing.JButton();
         networkCreationParamsPanel = new ip.ui.NetworkCreationParamsPanel();
         createNetworkPanel = new javax.swing.JPanel();
         createNetworkButton = new javax.swing.JButton();
@@ -95,14 +89,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
             }
         });
         buttonPanel.add(trainNetworkButton);
-
-        testNetworkButton.setText("Testuj sieć");
-        testNetworkButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                testNetworkButtonActionPerformed(evt);
-            }
-        });
-        buttonPanel.add(testNetworkButton);
 
         createNetworkButton.setText("Stwórz sieć");
         createNetworkButton.addActionListener(new java.awt.event.ActionListener() {
@@ -146,7 +132,8 @@ public class ApproximationDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(downSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -158,18 +145,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
         }
 
         try {
-//            JFileChooser trainingDataFileChooser = new JFileChooser(".");
-//            int result = trainingDataFileChooser.showOpenDialog(this);
-//
-//            if (result == JFileChooser.CANCEL_OPTION) {
-//                return;
-//            }
-//
-//            File chosenFile = trainingDataFileChooser.getSelectedFile();
-//
-//            TrainingDataProvider provider = new TrainingDataProvider(
-//                    chosenFile, inputNeurons, outputNeurons, " ");
-
             RandomInputProvider provider = new RandomInputProvider(100);
             List<InputRow> trainingData = provider.provideAllRows();
 
@@ -192,38 +167,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_trainNetworkButtonActionPerformed
 
-    private void testNetworkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testNetworkButtonActionPerformed
-        if (network == null) {
-            return;
-        }
-
-//            JFileChooser trainingDataFileChooser = new JFileChooser(".");
-//            int result = trainingDataFileChooser.showOpenDialog(this);
-//
-//            if (result == JFileChooser.CANCEL_OPTION) {
-//                return;
-//            }
-//
-//            File chosenFile = trainingDataFileChooser.getSelectedFile();
-//
-//            TrainingDataProvider provider = new TrainingDataProvider(
-//                    chosenFile, inputNeurons, outputNeurons, " ");
-        RandomInputProvider provider = new RandomInputProvider(100);
-        List<InputRow> trainingData = provider.provideAllRows();
-
-        List<double[]> networkResults = new ArrayList<>(trainingData.size());
-        trainingData.stream().forEach(
-                (InputRow row) -> networkResults.add(network.runNetwork(row.getValues()))
-        );
-
-        double errorSum = 0;
-        for (int i = 0; i < trainingData.size(); ++i) {
-            errorSum += Math.abs(networkResults.get(i)[0] - trainingData.get(i).getExpectedOutput()[0]);
-        }
-        
-        System.out.println("Average absolute error: " + errorSum / trainingData.size());
-    }//GEN-LAST:event_testNetworkButtonActionPerformed
-
     private void createNetworkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createNetworkButtonActionPerformed
         try {
             inputNeurons = networkCreationParamsPanel.getNetworkInputsNum();
@@ -241,7 +184,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
                     JOptionPane.INFORMATION_MESSAGE);
 
             trainNetworkButton.setEnabled(true);
-            testNetworkButton.setEnabled(true);
         } catch (EmptyInputFieldException | CannotCreateNetworkException ex) {
             Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
@@ -260,7 +202,6 @@ public class ApproximationDialog extends javax.swing.JDialog {
     private ip.ui.LearningParamsInputPanel learningParamsInputPanel;
     private ip.ui.NetworkCreationParamsPanel networkCreationParamsPanel;
     private javax.swing.JSeparator networkCreationSeparator;
-    private javax.swing.JButton testNetworkButton;
     private javax.swing.JButton trainNetworkButton;
     // End of variables declaration//GEN-END:variables
 }
