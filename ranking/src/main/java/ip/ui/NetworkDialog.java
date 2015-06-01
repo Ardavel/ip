@@ -7,6 +7,8 @@ import ip.mock.RandomRunsGenerator;
 import ip.network.MultiLayerNetwork;
 import ip.network.exceptions.CannotCreateNetworkException;
 import ip.network.factory.MultiLayerNetworkFactory;
+import ip.network.input.DatabaseInputProvider;
+import ip.network.input.InputProvider;
 import ip.network.input.InputRow;
 import ip.network.input.RandomInputProvider;
 import ip.network.neuron.AbstractNeuron;
@@ -241,7 +243,8 @@ public class NetworkDialog extends javax.swing.JDialog {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
             // here DatabaseInputProvider should be used
-            RandomInputProvider provider = new RandomInputProvider(100);
+            //RandomInputProvider provider = new RandomInputProvider(100);
+            InputProvider provider = new DatabaseInputProvider();
             List<InputRow> trainingData = provider.provideAllRows();
 
             int maxEpochNum = learningParamsInputPanel.getMaximumEpochNumber();
