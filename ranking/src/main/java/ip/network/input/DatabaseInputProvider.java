@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class DatabaseInputProvider implements InputProvider {
 
-    private static final int INPUTS_NUM = 4;
+    private static final int INPUTS_NUM = 6;
 
     private static final int OUTPUTS_NUM = 1;
 
@@ -43,10 +43,12 @@ public class DatabaseInputProvider implements InputProvider {
             NormalDistribution distribution = new NormalDistribution(arch.getMeanImap(), arch.getSdFactorImap(), arch.getRuns());
             double[] values = new double[INPUTS_NUM];
             double[] expectedOutput = new double[OUTPUTS_NUM];
-            values[0] = arch.getVehicle().getMass();
+            values[0] = run.getAvgImap();
             values[1] = arch.getFuel().getRatio();
             values[2] = arch.getFuel().getDensity();
-            values[3] = run.getAvgImap();
+            values[3] = arch.getVehicle().getMass();
+            values[4] = arch.getVehicle().getPower();
+            values[5] = arch.getVehicle().getEngineVolume();
 
             expectedOutput[0] = distribution.mapPosition(run.getAvgImap());
 
