@@ -232,6 +232,7 @@ public class NetworkDialog extends javax.swing.JDialog {
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
+            // here DatabaseInputProvider should be used
             RandomInputProvider provider = new RandomInputProvider(100);
             List<InputRow> trainingData = provider.provideAllRows();
 
