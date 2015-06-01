@@ -19,15 +19,17 @@ public class RandomRunsGenerator {
     
     private final static double MAX_SAFETY_PENALTY_PER_KM = 7.5;
     
-    public List<SummarizedRun> generateRandomSummarizedSummarizedRuns(int runsCount) {
+    private final static double DISTANCE = 200;
+    
+    public List<SummarizedRun> generateRandomSummarizedRuns(int runsCount) {
         List<SummarizedRun> result = new ArrayList<>(runsCount);
         
         for (int i = 0; i < runsCount; ++i) {
             SummarizedRun run = new SummarizedRun();
             run.setAverageIMAP(generateAverageIMAP());
             run.setEndingTime(new Date());
-            run.setSafetyPenaltyPerKm(IMAP_SPAN);
             run.setSafetyPenaltyPerKm(generateSafetyPentaltyPerKm());
+            run.setDistance(Math.random() * DISTANCE);
             result.add(run);
         }
         

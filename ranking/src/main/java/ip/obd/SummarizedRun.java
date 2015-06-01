@@ -12,6 +12,8 @@ public class SummarizedRun {
     
     private double safetyPenaltyPerKm;
     
+    private double distance;
+    
     private Date endingTime;
 
     public double getAverageIMAP() {
@@ -28,6 +30,14 @@ public class SummarizedRun {
 
     public void setSafetyPenaltyPerKm(double safetyPenaltyPerKm) {
         this.safetyPenaltyPerKm = safetyPenaltyPerKm;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     public Date getEndingTime() {
