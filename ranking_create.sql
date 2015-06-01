@@ -22,7 +22,7 @@ DROP DATABASE ranking;
 CREATE DATABASE ranking WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Polish_Poland.1250' LC_CTYPE = 'Polish_Poland.1250';
 
 
-ALTER DATABASE ranking OWNER TO postgres;
+ALTER DATABASE ranking OWNER TO ip;
 
 \connect ranking
 */
@@ -41,7 +41,7 @@ SET client_min_messages = warning;
 CREATE SCHEMA public;
 */
 
-ALTER SCHEMA public OWNER TO postgres;
+ALTER SCHEMA public OWNER TO ip;
 
 --
 -- TOC entry 2003 (class 0 OID 0)
@@ -90,7 +90,7 @@ CREATE TABLE architecture (
 );
 
 
-ALTER TABLE public.architecture OWNER TO postgres;
+ALTER TABLE public.architecture OWNER TO ip;
 
 --
 -- TOC entry 175 (class 1259 OID 17754)
@@ -105,7 +105,7 @@ CREATE SEQUENCE architecture_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.architecture_id_seq OWNER TO postgres;
+ALTER TABLE public.architecture_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2006 (class 0 OID 0)
@@ -127,7 +127,7 @@ CREATE TABLE brand (
 );
 
 
-ALTER TABLE public.brand OWNER TO postgres;
+ALTER TABLE public.brand OWNER TO ip;
 
 --
 -- TOC entry 179 (class 1259 OID 17793)
@@ -142,7 +142,7 @@ CREATE SEQUENCE brand_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.brand_id_seq OWNER TO postgres;
+ALTER TABLE public.brand_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2007 (class 0 OID 0)
@@ -167,7 +167,7 @@ CREATE TABLE driver (
 );
 
 
-ALTER TABLE public.driver OWNER TO postgres;
+ALTER TABLE public.driver OWNER TO ip;
 
 --
 -- TOC entry 170 (class 1259 OID 17725)
@@ -182,7 +182,7 @@ CREATE SEQUENCE driver_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.driver_id_seq OWNER TO postgres;
+ALTER TABLE public.driver_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2008 (class 0 OID 0)
@@ -206,7 +206,7 @@ CREATE TABLE fuel (
 );
 
 
-ALTER TABLE public.fuel OWNER TO postgres;
+ALTER TABLE public.fuel OWNER TO ip;
 
 --
 -- TOC entry 183 (class 1259 OID 17823)
@@ -221,7 +221,7 @@ CREATE SEQUENCE fuel_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.fuel_id_seq OWNER TO postgres;
+ALTER TABLE public.fuel_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2009 (class 0 OID 0)
@@ -244,7 +244,7 @@ CREATE TABLE model (
 );
 
 
-ALTER TABLE public.model OWNER TO postgres;
+ALTER TABLE public.model OWNER TO ip;
 
 --
 -- TOC entry 177 (class 1259 OID 17782)
@@ -259,7 +259,7 @@ CREATE SEQUENCE model_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.model_id_seq OWNER TO postgres;
+ALTER TABLE public.model_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2010 (class 0 OID 0)
@@ -283,7 +283,7 @@ CREATE TABLE run (
 );
 
 
-ALTER TABLE public.run OWNER TO postgres;
+ALTER TABLE public.run OWNER TO ip;
 
 --
 -- TOC entry 180 (class 1259 OID 17806)
@@ -298,7 +298,7 @@ CREATE SEQUENCE run_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.run_id_seq OWNER TO postgres;
+ALTER TABLE public.run_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2011 (class 0 OID 0)
@@ -323,7 +323,7 @@ CREATE TABLE vehicle (
 );
 
 
-ALTER TABLE public.vehicle OWNER TO postgres;
+ALTER TABLE public.vehicle OWNER TO ip;
 
 --
 -- TOC entry 173 (class 1259 OID 17738)
@@ -338,7 +338,7 @@ CREATE SEQUENCE vehicle_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.vehicle_id_seq OWNER TO postgres;
+ALTER TABLE public.vehicle_id_seq OWNER TO ip;
 
 --
 -- TOC entry 2012 (class 0 OID 0)
