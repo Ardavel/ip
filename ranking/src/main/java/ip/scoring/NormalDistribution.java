@@ -57,7 +57,7 @@ public class NormalDistribution {
         double plus3Sigma = mean + 3 * standardDeviation;
         double span = plus3Sigma - minus3Sigma;
         
-        return (sample - minus3Sigma) / span;
+        return 1 - ((sample - minus3Sigma) / span);
     }
 
     public double getMean() {

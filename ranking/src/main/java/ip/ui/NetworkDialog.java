@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ip.ui;
 
 import ip.network.MultiLayerNetwork;
@@ -14,6 +9,7 @@ import ip.network.neuron.AbstractNeuron;
 import ip.network.strategy.bp.BackPropagationStrategy;
 import ip.network.strategy.bp.IdentityActivationBPS;
 import ip.network.training.ThresholdEpochNetworkTrainer;
+import ip.scoring.NormalDistribution;
 import ip.ui.exceptions.EmptyInputFieldException;
 import ip.ui.plot.PlotGenerator;
 import ip.ui.plot.PlotNamer;
@@ -28,11 +24,13 @@ import javax.swing.JOptionPane;
  *
  * @author PiotrGrzelak
  */
-public class ApproximationDialog extends javax.swing.JDialog {
+public class NetworkDialog extends javax.swing.JDialog {
 
     private PlotGenerator generator;
 
     private MultiLayerNetwork network;
+    
+    private NormalDistribution safeDrivingDistribution;
 
     private int hiddenNeurons;
 
@@ -40,10 +38,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
 
     private int outputNeurons;
 
-    /**
-     * Creates new form ApproximationDialog
-     */
-    public ApproximationDialog(java.awt.Frame parent, boolean modal) {
+    public NetworkDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         generator = new PlotGenerator();
         initComponents();
@@ -169,7 +164,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
         } catch (EmptyInputFieldException | IOException ex) {
-            Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NetworkDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_trainNetworkButtonActionPerformed
 
@@ -191,7 +186,7 @@ public class ApproximationDialog extends javax.swing.JDialog {
 
             trainNetworkButton.setEnabled(true);
         } catch (EmptyInputFieldException | CannotCreateNetworkException ex) {
-            Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NetworkDialog.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_createNetworkButtonActionPerformed
