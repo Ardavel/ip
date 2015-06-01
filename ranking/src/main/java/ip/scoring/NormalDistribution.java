@@ -15,6 +15,17 @@ public class NormalDistribution {
     private double standardDeviation = 0;
     
     private int samples = 0;
+
+    public NormalDistribution() {
+    }
+    
+    public NormalDistribution(double mean, double standardDeviationFactor, int samples) {
+        this.mean = mean;
+        this.standardDeviationFactor = standardDeviationFactor;
+        this.samples = samples;
+        
+        standardDeviation = Math.sqrt(standardDeviationFactor / samples);
+    }
     
     public void processSample(double sample) {
         ++samples;
@@ -39,6 +50,14 @@ public class NormalDistribution {
         standardDeviation /= samples;
         
         standardDeviationFactor = standardDeviation * standardDeviation * samples;
+    }
+    
+    public double mapPosition(double sample) {
+        double minus3Sigma = mean - 3 * standardDeviation;
+        double plus3Sigma = mean + 3 * standardDeviation;
+        double span = plus3Sigma - minus3Sigma;
+        
+        return (sample - minus3Sigma) / span;
     }
 
     public double getMean() {
