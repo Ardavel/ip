@@ -30,18 +30,23 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "Driver.findBySafePoints", query = "SELECT d FROM Driver d WHERE d.safePoints = :safePoints")})
 public class Driver implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
+    
     @Basic(optional = false)
     private String nickname;
+    
     @Basic(optional = false)
     @Column(name = "eco_points")
     private int ecoPoints;
+    
     @Basic(optional = false)
     @Column(name = "safe_points")
     private int safePoints;
+    
     @JoinColumn(name = "vehicle", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Vehicle vehicle;

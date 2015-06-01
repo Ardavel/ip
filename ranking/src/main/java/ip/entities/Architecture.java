@@ -29,22 +29,29 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "Architecture.findBySdFactorImap", query = "SELECT a FROM Architecture a WHERE a.sdFactorImap = :sdFactorImap"),
     @NamedQuery(name = "Architecture.findByRuns", query = "SELECT a FROM Architecture a WHERE a.runs = :runs")})
 public class Architecture implements Serializable {
+
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
+    
     @Basic(optional = false)
     @Column(name = "mean_imap")
     private double meanImap;
+    
     @Basic(optional = false)
     @Column(name = "sd_factor_imap")
     private double sdFactorImap;
+    
     @Basic(optional = false)
     private int runs;
+    
     @JoinColumn(name = "fuel", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Fuel fuel;
+    
     @JoinColumn(name = "vehicle", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Vehicle vehicle;
@@ -135,5 +142,5 @@ public class Architecture implements Serializable {
     public String toString() {
         return "ip.entities.Architecture[ id=" + id + " ]";
     }
-    
+
 }

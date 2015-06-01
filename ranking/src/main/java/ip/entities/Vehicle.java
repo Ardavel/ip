@@ -32,24 +32,32 @@ import javax.persistence.OneToMany;
     @NamedQuery(name = "Vehicle.findByEngineVolume", query = "SELECT v FROM Vehicle v WHERE v.engineVolume = :engineVolume"),
     @NamedQuery(name = "Vehicle.findByPower", query = "SELECT v FROM Vehicle v WHERE v.power = :power")})
 public class Vehicle implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
+    
     @Basic(optional = false)
     private double mass;
+    
     @Basic(optional = false)
     @Column(name = "engine_volume")
     private double engineVolume;
+    
     @Basic(optional = false)
     private double power;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
     private List<Driver> driverList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
     private List<Run> runList;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
     private List<Architecture> architectureList;
+    
     @JoinColumn(name = "model", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Model model;
@@ -156,5 +164,5 @@ public class Vehicle implements Serializable {
     public String toString() {
         return "ip.entities.Vehicle[ id=" + id + " ]";
     }
-    
+
 }

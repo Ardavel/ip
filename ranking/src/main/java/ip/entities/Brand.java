@@ -27,13 +27,17 @@ import javax.persistence.OneToMany;
     @NamedQuery(name = "Brand.findById", query = "SELECT b FROM Brand b WHERE b.id = :id"),
     @NamedQuery(name = "Brand.findByName", query = "SELECT b FROM Brand b WHERE b.name = :name")})
 public class Brand implements Serializable {
+
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
+    
     @Basic(optional = false)
     private String name;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "brand")
     private List<Model> modelList;
 
@@ -97,5 +101,5 @@ public class Brand implements Serializable {
     public String toString() {
         return "ip.entities.Brand[ id=" + id + " ]";
     }
-    
+
 }

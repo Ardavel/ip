@@ -29,17 +29,23 @@ import javax.persistence.OneToMany;
     @NamedQuery(name = "Fuel.findByRatio", query = "SELECT f FROM Fuel f WHERE f.ratio = :ratio"),
     @NamedQuery(name = "Fuel.findByDensity", query = "SELECT f FROM Fuel f WHERE f.density = :density")})
 public class Fuel implements Serializable {
+
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
+    
     @Basic(optional = false)
     private String name;
+    
     @Basic(optional = false)
     private double ratio;
+    
     @Basic(optional = false)
     private double density;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fuel")
     private List<Architecture> architectureList;
 
@@ -121,5 +127,5 @@ public class Fuel implements Serializable {
     public String toString() {
         return "ip.entities.Fuel[ id=" + id + " ]";
     }
-    
+
 }

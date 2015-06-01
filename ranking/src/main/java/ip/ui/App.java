@@ -8,13 +8,12 @@ package ip.ui;
 import ip.obd.OBDData;
 import ip.obd.OBDDataParser;
 import ip.rest.OBDDataRestfulClient;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.codec.binary.Base64;
-import org.json.JSONArray;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,9 +23,8 @@ import org.json.JSONObject;
  */
 public class App {
 
-    /**
-     * @param args the command line arguments
-     */
+    private final static Logger logger = Logger.getLogger(App.class.getName());
+
     public static void main(String[] args) {
         List<OBDData> inputs = null;
         try {
@@ -48,8 +46,18 @@ public class App {
             System.out.println("IMAP = " + IMAP);
             System.out.println("MAF = " + MAF);
         }
-        
-        
+
+        try {
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+        }
+
         ApproximationDialog approximationDialog = new ApproximationDialog(null, true);
         WindowUtils.centerWindow(approximationDialog);
         approximationDialog.setVisible(true);

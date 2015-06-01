@@ -31,18 +31,22 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Run.findByAvgImap", query = "SELECT r FROM Run r WHERE r.avgImap = :avgImap"),
     @NamedQuery(name = "Run.findByEndingTime", query = "SELECT r FROM Run r WHERE r.endingTime = :endingTime")})
 public class Run implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
+
     @Basic(optional = false)
     @Column(name = "avg_imap")
     private double avgImap;
+
     @Basic(optional = false)
     @Column(name = "ending_time")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endingTime;
+
     @JoinColumn(name = "vehicle", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Vehicle vehicle;
@@ -116,5 +120,5 @@ public class Run implements Serializable {
     public String toString() {
         return "ip.entities.Run[ id=" + id + " ]";
     }
-    
+
 }
