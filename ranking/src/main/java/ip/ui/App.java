@@ -5,17 +5,11 @@
  */
 package ip.ui;
 
-import ip.obd.OBDData;
-import ip.obd.OBDDataParser;
-import ip.rest.OBDDataRestfulClient;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
@@ -26,26 +20,6 @@ public class App {
     private final static Logger logger = Logger.getLogger(App.class.getName());
 
     public static void main(String[] args) {
-        List<OBDData> inputs = null;
-        try {
-            OBDDataRestfulClient obdDataRestfulClient = new OBDDataRestfulClient();
-            JSONObject OBDJSONData = new JSONObject(obdDataRestfulClient.getRESTResponse(1431445243000L, 1431446143000L));
-            inputs = OBDDataParser.parseOBDData(OBDJSONData);
-        } catch (JSONException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        for (OBDData data : inputs) {
-            double IMAP = OBDDataParser.calculateIMAP(data.getRPM(), data.getMAP(), data.getIAT());
-            //DATA BELOW IS FOR: "The VE of my 1999 7.4L Chevy Suburban is about 65%."
-            //Volumetric efficiency [percent]
-            double VE = 0.65;
-            //Engine displacement [liters]
-            double ED = 7.4;
-            double MAF = OBDDataParser.calculateMAF(IMAP, VE, ED);
-            System.out.println("RPM = " + data.getRPM());
-            System.out.println("IMAP = " + IMAP);
-            System.out.println("MAF = " + MAF);
-        }
 
         try {
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -64,4 +38,24 @@ public class App {
 
     }
 
+//        List<OBDData> inputs = null;
+//        try {
+//            OBDDataRestfulClient obdDataRestfulClient = new OBDDataRestfulClient();
+//            JSONObject OBDJSONData = new JSONObject(obdDataRestfulClient.getRESTResponse(1431445243000L, 1431446143000L));
+//            inputs = OBDDataParser.parseOBDData(OBDJSONData);
+//        } catch (JSONException ex) {
+//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        for (OBDData data : inputs) {
+//            double IMAP = OBDDataParser.calculateIMAP(data.getRPM(), data.getMAP(), data.getIAT());
+//            //DATA BELOW IS FOR: "The VE of my 1999 7.4L Chevy Suburban is about 65%."
+//            //Volumetric efficiency [percent]
+//            double VE = 0.65;
+//            //Engine displacement [liters]
+//            double ED = 7.4;
+//            double MAF = OBDDataParser.calculateMAF(IMAP, VE, ED);
+//            System.out.println("RPM = " + data.getRPM());
+//            System.out.println("IMAP = " + IMAP);
+//            System.out.println("MAF = " + MAF);
+//        }
 }
