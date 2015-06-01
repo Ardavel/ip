@@ -47,9 +47,9 @@ public class Driver implements Serializable {
     @Column(name = "safe_points")
     private int safePoints;
     
-    @JoinColumn(name = "vehicle", referencedColumnName = "id")
+    @JoinColumn(name = "architecture", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Vehicle vehicle;
+    private Architecture architecture;
 
     public Driver() {
     }
@@ -97,12 +97,12 @@ public class Driver implements Serializable {
         this.safePoints = safePoints;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Architecture getArchitecture() {
+        return architecture;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setArchitecture(Architecture architecture) {
+        this.architecture = architecture;
     }
 
     @Override

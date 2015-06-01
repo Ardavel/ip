@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
  */
 public class NetworkDialog extends javax.swing.JDialog {
 
-    private PlotGenerator generator;
+    private final PlotGenerator generator;
 
     private MultiLayerNetwork network;
     
@@ -48,6 +48,13 @@ public class NetworkDialog extends javax.swing.JDialog {
         networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
         learningParamsInputPanel.setDefaultLearningRate(0.1);
+        
+        initializeSafeDrivingDistribution();
+    }
+    
+    private void initializeSafeDrivingDistribution() {
+        // here safe driving distribution should be deserialized for the final
+        // version of the project
     }
 
     /**
@@ -62,7 +69,6 @@ public class NetworkDialog extends javax.swing.JDialog {
         headerPanel = new javax.swing.JPanel();
         headerLabel = new javax.swing.JLabel();
         headerSeparator = new javax.swing.JSeparator();
-        downSeparator = new javax.swing.JSeparator();
         buttonPanel = new javax.swing.JPanel();
         trainNetworkButton = new javax.swing.JButton();
         networkCreationParamsPanel = new ip.ui.NetworkCreationParamsPanel();
@@ -70,6 +76,14 @@ public class NetworkDialog extends javax.swing.JDialog {
         createNetworkButton = new javax.swing.JButton();
         networkCreationSeparator = new javax.swing.JSeparator();
         learningParamsInputPanel = new ip.ui.LearningParamsInputPanel();
+        networkSeparator = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        generateRunsButton = new javax.swing.JButton();
+        numberOfRunsLabel = new javax.swing.JLabel();
+        numberOfRuns = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        rankingButon = new javax.swing.JButton();
+        rankingSeparator = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Aproksymacja");
@@ -94,22 +108,81 @@ public class NetworkDialog extends javax.swing.JDialog {
         });
         createNetworkPanel.add(createNetworkButton);
 
+        generateRunsButton.setText("Generuj trasy");
+        generateRunsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateRunsButtonActionPerformed(evt);
+            }
+        });
+
+        numberOfRunsLabel.setText("Liczba tras:");
+
+        numberOfRuns.setText("100");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(numberOfRunsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(numberOfRuns, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(generateRunsButton)
+                .addGap(76, 76, 76))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(generateRunsButton)
+                    .addComponent(numberOfRunsLabel)
+                    .addComponent(numberOfRuns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        rankingButon.setText("Ranking");
+        rankingButon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rankingButonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(137, 137, 137)
+                .addComponent(rankingButon)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(rankingButon)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(buttonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(headerSeparator)
-            .addComponent(downSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(networkSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(buttonPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(networkCreationParamsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(createNetworkPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(networkCreationSeparator)))
+                        .addComponent(networkCreationSeparator))
+                    .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(rankingSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -123,12 +196,18 @@ public class NetworkDialog extends javax.swing.JDialog {
                 .addComponent(createNetworkPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(networkCreationSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(downSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(networkSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(rankingSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -191,18 +270,34 @@ public class NetworkDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
+    private void generateRunsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRunsButtonActionPerformed
+        // here given number of runs should be generated, persisted in the DB
+        // for each run driver should be awarded points for safety and ecology
+    }//GEN-LAST:event_generateRunsButtonActionPerformed
+
+    private void rankingButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rankingButonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rankingButonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton createNetworkButton;
     private javax.swing.JPanel createNetworkPanel;
-    private javax.swing.JSeparator downSeparator;
+    private javax.swing.JButton generateRunsButton;
     private javax.swing.JLabel headerLabel;
     private javax.swing.JPanel headerPanel;
     private javax.swing.JSeparator headerSeparator;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private ip.ui.LearningParamsInputPanel learningParamsInputPanel;
     private ip.ui.NetworkCreationParamsPanel networkCreationParamsPanel;
     private javax.swing.JSeparator networkCreationSeparator;
+    private javax.swing.JSeparator networkSeparator;
+    private javax.swing.JTextField numberOfRuns;
+    private javax.swing.JLabel numberOfRunsLabel;
+    private javax.swing.JButton rankingButon;
+    private javax.swing.JSeparator rankingSeparator;
     private javax.swing.JButton trainNetworkButton;
     // End of variables declaration//GEN-END:variables
 }

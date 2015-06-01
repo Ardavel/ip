@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ip.facades;
 
-import ip.entities.Driver;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import ip.entities.Vehicle;
+import ip.entities.Architecture;
+import ip.entities.Driver;
 import ip.facades.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -37,15 +32,15 @@ public class DriverJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Vehicle vehicle = driver.getVehicle();
-            if (vehicle != null) {
-                vehicle = em.getReference(vehicle.getClass(), vehicle.getId());
-                driver.setVehicle(vehicle);
+            Architecture architecture = driver.getArchitecture();
+            if (architecture != null) {
+                architecture = em.getReference(architecture.getClass(), architecture.getId());
+                driver.setArchitecture(architecture);
             }
             em.persist(driver);
-            if (vehicle != null) {
-                vehicle.getDriverList().add(driver);
-                vehicle = em.merge(vehicle);
+            if (architecture != null) {
+                architecture.getDriverList().add(driver);
+                architecture = em.merge(architecture);
             }
             em.getTransaction().commit();
         } finally {
@@ -61,20 +56,20 @@ public class DriverJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Driver persistentDriver = em.find(Driver.class, driver.getId());
-            Vehicle vehicleOld = persistentDriver.getVehicle();
-            Vehicle vehicleNew = driver.getVehicle();
-            if (vehicleNew != null) {
-                vehicleNew = em.getReference(vehicleNew.getClass(), vehicleNew.getId());
-                driver.setVehicle(vehicleNew);
+            Architecture architectureOld = persistentDriver.getArchitecture();
+            Architecture architectureNew = driver.getArchitecture();
+            if (architectureNew != null) {
+                architectureNew = em.getReference(architectureNew.getClass(), architectureNew.getId());
+                driver.setArchitecture(architectureNew);
             }
             driver = em.merge(driver);
-            if (vehicleOld != null && !vehicleOld.equals(vehicleNew)) {
-                vehicleOld.getDriverList().remove(driver);
-                vehicleOld = em.merge(vehicleOld);
+            if (architectureOld != null && !architectureOld.equals(architectureNew)) {
+                architectureOld.getDriverList().remove(driver);
+                architectureOld = em.merge(architectureOld);
             }
-            if (vehicleNew != null && !vehicleNew.equals(vehicleOld)) {
-                vehicleNew.getDriverList().add(driver);
-                vehicleNew = em.merge(vehicleNew);
+            if (architectureNew != null && !architectureNew.equals(architectureOld)) {
+                architectureNew.getDriverList().add(driver);
+                architectureNew = em.merge(architectureNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -105,10 +100,10 @@ public class DriverJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The driver with id " + id + " no longer exists.", enfe);
             }
-            Vehicle vehicle = driver.getVehicle();
-            if (vehicle != null) {
-                vehicle.getDriverList().remove(driver);
-                vehicle = em.merge(vehicle);
+            Architecture architecture = driver.getArchitecture();
+            if (architecture != null) {
+                architecture.getDriverList().remove(driver);
+                architecture = em.merge(architecture);
             }
             em.remove(driver);
             em.getTransaction().commit();

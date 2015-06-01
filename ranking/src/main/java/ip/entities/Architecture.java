@@ -6,7 +6,9 @@
 package ip.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -31,30 +34,33 @@ import javax.persistence.NamedQuery;
 public class Architecture implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
-    
+
     @Basic(optional = false)
     @Column(name = "mean_imap")
     private double meanImap;
-    
+
     @Basic(optional = false)
     @Column(name = "sd_factor_imap")
     private double sdFactorImap;
-    
+
     @Basic(optional = false)
     private int runs;
-    
+
     @JoinColumn(name = "fuel", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Fuel fuel;
-    
+
     @JoinColumn(name = "vehicle", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Vehicle vehicle;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
+    private List<Driver> driverList;
 
     public Architecture() {
     }
@@ -116,6 +122,14 @@ public class Architecture implements Serializable {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public List<Driver> getDriverList() {
+        return driverList;
+    }
+
+    public void setDriverList(List<Driver> driverList) {
+        this.driverList = driverList;
     }
 
     @Override

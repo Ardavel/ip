@@ -50,9 +50,6 @@ public class Vehicle implements Serializable {
     private double power;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
-    private List<Driver> driverList;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
     private List<Run> runList;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
@@ -106,14 +103,6 @@ public class Vehicle implements Serializable {
 
     public void setPower(double power) {
         this.power = power;
-    }
-
-    public List<Driver> getDriverList() {
-        return driverList;
-    }
-
-    public void setDriverList(List<Driver> driverList) {
-        this.driverList = driverList;
     }
 
     public List<Run> getRunList() {
