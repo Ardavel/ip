@@ -62,6 +62,9 @@ public class Architecture implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
     private List<Driver> driverList;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vehicle")
+    private List<Run> runList;
+
     public Architecture() {
     }
 
@@ -130,6 +133,14 @@ public class Architecture implements Serializable {
 
     public void setDriverList(List<Driver> driverList) {
         this.driverList = driverList;
+    }
+
+    public List<Run> getRunList() {
+        return runList;
+    }
+
+    public void setRunList(List<Run> runList) {
+        this.runList = runList;
     }
 
     @Override
