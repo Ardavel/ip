@@ -14,7 +14,7 @@ public class TrainingDataProvider implements InputProvider {
 
     protected List<InputRow> dataset;
 
-    int nextRow = 0;
+    private int nextRow = 0;
 
     protected TrainingDataProvider() {
     }

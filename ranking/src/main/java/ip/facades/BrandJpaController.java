@@ -2,17 +2,16 @@ package ip.facades;
 
 import ip.entities.Brand;
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ip.entities.Model;
 import ip.facades.exceptions.IllegalOrphanException;
 import ip.facades.exceptions.NonexistentEntityException;
+import org.eclipse.persistence.internal.jpa.EntityManagerFactoryProvider;
+
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -20,10 +19,10 @@ import javax.persistence.EntityManagerFactory;
  */
 public class BrandJpaController implements Serializable {
 
-    public BrandJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public BrandJpaController() {
+        emf = Persistence.createEntityManagerFactory("ipRankingPU");
     }
-    private EntityManagerFactory emf = null;
+    private EntityManagerFactory emf;
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();

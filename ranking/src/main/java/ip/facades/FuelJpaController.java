@@ -1,8 +1,7 @@
 package ip.facades;
 
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ip.entities.Architecture;
@@ -11,8 +10,6 @@ import ip.facades.exceptions.IllegalOrphanException;
 import ip.facades.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -20,8 +17,8 @@ import javax.persistence.EntityManagerFactory;
  */
 public class FuelJpaController implements Serializable {
 
-    public FuelJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public FuelJpaController() {
+        emf = Persistence.createEntityManagerFactory("ipRankingPU");
     }
     private EntityManagerFactory emf = null;
 

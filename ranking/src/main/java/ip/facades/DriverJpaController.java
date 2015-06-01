@@ -1,16 +1,13 @@
 package ip.facades;
 
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ip.entities.Architecture;
 import ip.entities.Driver;
 import ip.facades.exceptions.NonexistentEntityException;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -18,8 +15,8 @@ import javax.persistence.EntityManagerFactory;
  */
 public class DriverJpaController implements Serializable {
 
-    public DriverJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public DriverJpaController() {
+        emf = Persistence.createEntityManagerFactory("ipRankingPU");
     }
     private EntityManagerFactory emf = null;
 

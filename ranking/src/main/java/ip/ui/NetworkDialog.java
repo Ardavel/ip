@@ -269,7 +269,7 @@ public class NetworkDialog extends javax.swing.JDialog {
             MultiLayerNetworkFactory factory = new MultiLayerNetworkFactory(
                     new int[]{inputNeurons, hiddenNeurons, outputNeurons}, strategy, true);
             network = factory.createNetwork();
-            network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> (n.setStrategy(identityStrategy)));
+            network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> n.setStrategy(identityStrategy));
 
             JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
                     JOptionPane.INFORMATION_MESSAGE);

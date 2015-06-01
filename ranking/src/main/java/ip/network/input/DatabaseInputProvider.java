@@ -1,5 +1,10 @@
 package ip.network.input;
 
+import ip.entities.Run;
+import ip.facades.RunJpaController;
+import ip.run.RunHandler;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,18 +13,45 @@ import java.util.List;
  */
 public class DatabaseInputProvider implements InputProvider {
 
+    private RunJpaController runJpaController;
+
+    private int nextRow = 0;
+
+    private List<InputRow> dataset;
+
+    private RunHandler handler = new RunHandler();
+
+    public DatabaseInputProvider() {
+        List<Run> runs = runJpaController.findRunEntities();
+        dataset = convertToInputRows(runs);
+    }
+
+    private List<InputRow> convertToInputRows(List<Run> runs) {
+        List<InputRow> rows = new ArrayList<>(runs.size());
+        for (Run run : runs) {
+            //handler.
+        }
+        return rows;
+    }
+
     @Override
     public boolean hasMoreRows() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return nextRow < dataset.size();
     }
 
     @Override
     public InputRow provideInputRow() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return dataset.get(nextRow++);
     }
 
     @Override
     public List<InputRow> provideAllRows() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<InputRow> result = new ArrayList<>();
+
+        while (nextRow < dataset.size()) {
+            result.add(dataset.get(nextRow++));
+        }
+
+        return result;
     }
 }

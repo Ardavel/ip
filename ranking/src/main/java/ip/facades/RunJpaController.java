@@ -4,10 +4,7 @@ import ip.entities.Run;
 import ip.facades.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -17,8 +14,8 @@ import javax.persistence.criteria.Root;
  */
 public class RunJpaController implements Serializable {
 
-    public RunJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
+    public RunJpaController() {
+        emf = Persistence.createEntityManagerFactory("ipRankingPU");
     }
     private EntityManagerFactory emf = null;
 

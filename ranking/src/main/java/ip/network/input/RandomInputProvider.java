@@ -19,7 +19,7 @@ public class RandomInputProvider implements InputProvider {
 
     protected List<InputRow> dataset;
 
-    int nextRow = 0;
+    private int nextRow = 0;
 
     private int inputSize = 14;
 
