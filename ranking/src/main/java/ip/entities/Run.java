@@ -47,9 +47,9 @@ public class Run implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endingTime;
 
-    @JoinColumn(name = "vehicle", referencedColumnName = "id")
+    @JoinColumn(name = "architecture", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Vehicle vehicle;
+    private Architecture architecture;
 
     public Run() {
     }
@@ -88,12 +88,12 @@ public class Run implements Serializable {
         this.endingTime = endingTime;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public Architecture getArchitecture() {
+        return architecture;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setArchitecture(Architecture architecture) {
+        this.architecture = architecture;
     }
 
     @Override

@@ -1,16 +1,15 @@
 package ip.facades;
 
 import ip.entities.Run;
+import ip.facades.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import ip.entities.Vehicle;
-import ip.facades.exceptions.NonexistentEntityException;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -32,16 +31,7 @@ public class RunJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Vehicle vehicle = run.getVehicle();
-            if (vehicle != null) {
-                vehicle = em.getReference(vehicle.getClass(), vehicle.getId());
-                run.setVehicle(vehicle);
-            }
             em.persist(run);
-            if (vehicle != null) {
-                vehicle.getRunList().add(run);
-                vehicle = em.merge(vehicle);
-            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -55,22 +45,7 @@ public class RunJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Run persistentRun = em.find(Run.class, run.getId());
-            Vehicle vehicleOld = persistentRun.getVehicle();
-            Vehicle vehicleNew = run.getVehicle();
-            if (vehicleNew != null) {
-                vehicleNew = em.getReference(vehicleNew.getClass(), vehicleNew.getId());
-                run.setVehicle(vehicleNew);
-            }
             run = em.merge(run);
-            if (vehicleOld != null && !vehicleOld.equals(vehicleNew)) {
-                vehicleOld.getRunList().remove(run);
-                vehicleOld = em.merge(vehicleOld);
-            }
-            if (vehicleNew != null && !vehicleNew.equals(vehicleOld)) {
-                vehicleNew.getRunList().add(run);
-                vehicleNew = em.merge(vehicleNew);
-            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -99,11 +74,6 @@ public class RunJpaController implements Serializable {
                 run.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The run with id " + id + " no longer exists.", enfe);
-            }
-            Vehicle vehicle = run.getVehicle();
-            if (vehicle != null) {
-                vehicle.getRunList().remove(run);
-                vehicle = em.merge(vehicle);
             }
             em.remove(run);
             em.getTransaction().commit();

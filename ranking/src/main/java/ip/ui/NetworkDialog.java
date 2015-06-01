@@ -1,5 +1,7 @@
 package ip.ui;
 
+import ip.entities.Run;
+import ip.mock.RandomRunsGenerator;
 import ip.network.MultiLayerNetwork;
 import ip.network.exceptions.CannotCreateNetworkException;
 import ip.network.factory.MultiLayerNetworkFactory;
@@ -9,6 +11,8 @@ import ip.network.neuron.AbstractNeuron;
 import ip.network.strategy.bp.BackPropagationStrategy;
 import ip.network.strategy.bp.IdentityActivationBPS;
 import ip.network.training.ThresholdEpochNetworkTrainer;
+import ip.obd.SummarizedRun;
+import ip.run.RunHandler;
 import ip.scoring.NormalDistribution;
 import ip.ui.exceptions.EmptyInputFieldException;
 import ip.ui.plot.PlotGenerator;
@@ -26,10 +30,12 @@ import javax.swing.JOptionPane;
  */
 public class NetworkDialog extends javax.swing.JDialog {
 
+    private final static Logger logger = Logger.getLogger(NetworkDialog.class.getName());
+
     private final PlotGenerator generator;
 
     private MultiLayerNetwork network;
-    
+
     private NormalDistribution safeDrivingDistribution;
 
     private int hiddenNeurons;
@@ -37,6 +43,10 @@ public class NetworkDialog extends javax.swing.JDialog {
     private int inputNeurons;
 
     private int outputNeurons;
+
+    private final RunHandler runHandler = new RunHandler();
+
+    private final RandomRunsGenerator randomRunsGenerator = new RandomRunsGenerator();
 
     public NetworkDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -48,10 +58,10 @@ public class NetworkDialog extends javax.swing.JDialog {
         networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
         learningParamsInputPanel.setDefaultLearningRate(0.1);
-        
+
         initializeSafeDrivingDistribution();
     }
-    
+
     private void initializeSafeDrivingDistribution() {
         // here safe driving distribution should be deserialized for the final
         // version of the project
@@ -265,15 +275,19 @@ public class NetworkDialog extends javax.swing.JDialog {
 
             trainNetworkButton.setEnabled(true);
         } catch (EmptyInputFieldException | CannotCreateNetworkException ex) {
-            Logger.getLogger(NetworkDialog.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
     private void generateRunsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRunsButtonActionPerformed
-        // generate a list of runs using RandomRunsGenerator
-        // iterate over them, assign random drivers and handle each run with
-        // RunHandler
+        List<SummarizedRun> randomRuns = randomRunsGenerator.generateRandomSummarizedRuns(Integer.parseInt(numberOfRuns.getText()));
+
+        for (SummarizedRun summarizedRun : randomRuns) {
+            Run run = summarizedRun.convertToRun();
+            // choose random driver
+            // handle run: runHandler.handleRun(summarizedRun, chosen_driver_here);
+        }
     }//GEN-LAST:event_generateRunsButtonActionPerformed
 
     private void rankingButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rankingButonActionPerformed

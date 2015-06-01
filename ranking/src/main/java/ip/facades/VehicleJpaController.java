@@ -6,13 +6,12 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import ip.entities.Model;
-import ip.entities.Run;
-import java.util.ArrayList;
-import java.util.List;
 import ip.entities.Architecture;
 import ip.entities.Vehicle;
 import ip.facades.exceptions.IllegalOrphanException;
 import ip.facades.exceptions.NonexistentEntityException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -32,9 +31,6 @@ public class VehicleJpaController implements Serializable {
     }
 
     public void create(Vehicle vehicle) {
-        if (vehicle.getRunList() == null) {
-            vehicle.setRunList(new ArrayList<Run>());
-        }
         if (vehicle.getArchitectureList() == null) {
             vehicle.setArchitectureList(new ArrayList<Architecture>());
         }
@@ -47,12 +43,6 @@ public class VehicleJpaController implements Serializable {
                 model = em.getReference(model.getClass(), model.getId());
                 vehicle.setModel(model);
             }
-            List<Run> attachedRunList = new ArrayList<Run>();
-            for (Run runListRunToAttach : vehicle.getRunList()) {
-                runListRunToAttach = em.getReference(runListRunToAttach.getClass(), runListRunToAttach.getId());
-                attachedRunList.add(runListRunToAttach);
-            }
-            vehicle.setRunList(attachedRunList);
             List<Architecture> attachedArchitectureList = new ArrayList<Architecture>();
             for (Architecture architectureListArchitectureToAttach : vehicle.getArchitectureList()) {
                 architectureListArchitectureToAttach = em.getReference(architectureListArchitectureToAttach.getClass(), architectureListArchitectureToAttach.getId());
@@ -63,15 +53,6 @@ public class VehicleJpaController implements Serializable {
             if (model != null) {
                 model.getVehicleList().add(vehicle);
                 model = em.merge(model);
-            }
-            for (Run runListRun : vehicle.getRunList()) {
-                Vehicle oldVehicleOfRunListRun = runListRun.getVehicle();
-                runListRun.setVehicle(vehicle);
-                runListRun = em.merge(runListRun);
-                if (oldVehicleOfRunListRun != null) {
-                    oldVehicleOfRunListRun.getRunList().remove(runListRun);
-                    oldVehicleOfRunListRun = em.merge(oldVehicleOfRunListRun);
-                }
             }
             for (Architecture architectureListArchitecture : vehicle.getArchitectureList()) {
                 Vehicle oldVehicleOfArchitectureListArchitecture = architectureListArchitecture.getVehicle();
@@ -98,19 +79,9 @@ public class VehicleJpaController implements Serializable {
             Vehicle persistentVehicle = em.find(Vehicle.class, vehicle.getId());
             Model modelOld = persistentVehicle.getModel();
             Model modelNew = vehicle.getModel();
-            List<Run> runListOld = persistentVehicle.getRunList();
-            List<Run> runListNew = vehicle.getRunList();
             List<Architecture> architectureListOld = persistentVehicle.getArchitectureList();
             List<Architecture> architectureListNew = vehicle.getArchitectureList();
             List<String> illegalOrphanMessages = null;
-            for (Run runListOldRun : runListOld) {
-                if (!runListNew.contains(runListOldRun)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Run " + runListOldRun + " since its vehicle field is not nullable.");
-                }
-            }
             for (Architecture architectureListOldArchitecture : architectureListOld) {
                 if (!architectureListNew.contains(architectureListOldArchitecture)) {
                     if (illegalOrphanMessages == null) {
@@ -126,13 +97,6 @@ public class VehicleJpaController implements Serializable {
                 modelNew = em.getReference(modelNew.getClass(), modelNew.getId());
                 vehicle.setModel(modelNew);
             }
-            List<Run> attachedRunListNew = new ArrayList<Run>();
-            for (Run runListNewRunToAttach : runListNew) {
-                runListNewRunToAttach = em.getReference(runListNewRunToAttach.getClass(), runListNewRunToAttach.getId());
-                attachedRunListNew.add(runListNewRunToAttach);
-            }
-            runListNew = attachedRunListNew;
-            vehicle.setRunList(runListNew);
             List<Architecture> attachedArchitectureListNew = new ArrayList<Architecture>();
             for (Architecture architectureListNewArchitectureToAttach : architectureListNew) {
                 architectureListNewArchitectureToAttach = em.getReference(architectureListNewArchitectureToAttach.getClass(), architectureListNewArchitectureToAttach.getId());
@@ -148,17 +112,6 @@ public class VehicleJpaController implements Serializable {
             if (modelNew != null && !modelNew.equals(modelOld)) {
                 modelNew.getVehicleList().add(vehicle);
                 modelNew = em.merge(modelNew);
-            }
-            for (Run runListNewRun : runListNew) {
-                if (!runListOld.contains(runListNewRun)) {
-                    Vehicle oldVehicleOfRunListNewRun = runListNewRun.getVehicle();
-                    runListNewRun.setVehicle(vehicle);
-                    runListNewRun = em.merge(runListNewRun);
-                    if (oldVehicleOfRunListNewRun != null && !oldVehicleOfRunListNewRun.equals(vehicle)) {
-                        oldVehicleOfRunListNewRun.getRunList().remove(runListNewRun);
-                        oldVehicleOfRunListNewRun = em.merge(oldVehicleOfRunListNewRun);
-                    }
-                }
             }
             for (Architecture architectureListNewArchitecture : architectureListNew) {
                 if (!architectureListOld.contains(architectureListNewArchitecture)) {
@@ -201,13 +154,6 @@ public class VehicleJpaController implements Serializable {
                 throw new NonexistentEntityException("The vehicle with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Run> runListOrphanCheck = vehicle.getRunList();
-            for (Run runListOrphanCheckRun : runListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Vehicle (" + vehicle + ") cannot be destroyed since the Run " + runListOrphanCheckRun + " in its runList field has a non-nullable vehicle field.");
-            }
             List<Architecture> architectureListOrphanCheck = vehicle.getArchitectureList();
             for (Architecture architectureListOrphanCheckArchitecture : architectureListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
