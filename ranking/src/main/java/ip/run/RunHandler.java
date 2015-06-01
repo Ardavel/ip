@@ -27,8 +27,12 @@ public class RunHandler {
         Run run = summarizedRun.convertToRun();
         run.setArchitecture(driver.getArchitecture());
         // update driver's eco and safety points in DB
+        
+        // update and persist distribution for architecture - when you call 
+        // processSample you will have updated parameters
         // persist run in the database
+                
         // in ideal case it should be one transaction but for now it can be in
-        // two separate transactions
+        // separate transactions
     }
 }
