@@ -32,7 +32,7 @@ public class App {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
 
-        ApproximationDialog approximationDialog = new ApproximationDialog(null, true);
+        NetworkDialog approximationDialog = new NetworkDialog(null, true);
         WindowUtils.centerWindow(approximationDialog);
         approximationDialog.setVisible(true);
 
