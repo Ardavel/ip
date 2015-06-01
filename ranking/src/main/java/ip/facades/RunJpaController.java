@@ -19,7 +19,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Ardavel
+ * @author Wojciech Szałapski
  */
 public class RunJpaController implements Serializable {
 

@@ -21,7 +21,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Ardavel
+ * @author Wojciech Szałapski
  */
 public class BrandJpaController implements Serializable {
 

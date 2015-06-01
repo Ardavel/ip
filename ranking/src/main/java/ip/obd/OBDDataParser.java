@@ -5,7 +5,6 @@
  */
 package ip.obd;
 
-import ip.rest.OBDDataRestfulClient;
 import ip.ui.App;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -22,14 +21,14 @@ import org.json.JSONObject;
  * @author Lukasz Cyran
  */
 public class OBDDataParser {
-    
-    public static List<OBDData> parseOBDData(JSONObject OBDJSONData){
+
+    public static List<OBDData> parseOBDData(JSONObject OBDJSONData) {
         List<OBDData> inputs = new ArrayList<>();
         try {
             JSONArray OBDJSONRows = OBDJSONData.getJSONArray("rows");
-            for(int i=0; i<OBDJSONRows.length(); i++){
+            for (int i = 0; i < OBDJSONRows.length(); i++) {
                 JSONObject row = OBDJSONRows.getJSONObject(i);
-                
+
                 Double RPM = Double.parseDouble(row.getString("MDI_OBD_RPM"));
 //                String FuelType = row.getString("MDI_OBD_PID_1"); //No data
 //                String MAF = row.getString("MDI_OBD_PID_2"); //No data
@@ -39,10 +38,10 @@ public class OBDDataParser {
                 byte[] IATFullBytes = {0, 0, 0, IATBytes[0]};
                 int MAP = ByteBuffer.wrap(MAPFullBytes).getInt();
                 int IAT = ByteBuffer.wrap(IATFullBytes).getInt();
-                
+
                 OBDData obdData = new OBDData(RPM, 0, 0, MAP, IAT);
                 inputs.add(obdData);
-                
+
                 System.out.println("RPM = " + RPM);
 //                System.out.println("Fuel Type = " + FuelType);
 //                System.out.println("MAF = " + MAF);
@@ -54,31 +53,32 @@ public class OBDDataParser {
         }
         return inputs;
     }
+
     /**
      * Calculates IMAP
-     * 
+     *
      * @param RPM - Revolutions per minute
      * @param MAP - Manifold absolute pressure [kPa]
      * @param IAT - Intake air temperature [Kelvin]
      * @return IMAP - Intake (?) manifold absolute pressure
      */
-    public static double calculateIMAP(double RPM, int MAP, int IAT){
+    public static double calculateIMAP(double RPM, int MAP, int IAT) {
         return RPM * MAP / IAT;
     }
-    
+
     /**
      * Calculates MAF
-     * 
+     *
      * @param IMAP - Intake (?) manifold absolute pressure
      * @param VE - Volumetric efficiency
      * @param ED - Engine displacement
      * @return MAF - Mass air-flow [grams/second]
      */
-    public static double calculateMAF(double IMAP, double VE, double ED){
+    public static double calculateMAF(double IMAP, double VE, double ED) {
         //Average molecular mass of air
         double MM = 28.97;
         //Gas constant [J/°K/mole]
         double R = 8.314;
-        return IMAP/120 * VE/100 * ED * MM / R;
+        return IMAP / 120 * VE / 100 * ED * MM / R;
     }
 }
