@@ -17,6 +17,7 @@ import ip.network.training.ThresholdEpochNetworkTrainer;
 import ip.ui.exceptions.EmptyInputFieldException;
 import ip.ui.plot.PlotGenerator;
 import ip.ui.plot.PlotNamer;
+import java.awt.Cursor;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -118,8 +119,8 @@ public class ApproximationDialog extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(headerSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(networkCreationParamsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -145,6 +146,8 @@ public class ApproximationDialog extends javax.swing.JDialog {
         }
 
         try {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
             RandomInputProvider provider = new RandomInputProvider(100);
             List<InputRow> trainingData = provider.provideAllRows();
 
@@ -162,6 +165,9 @@ public class ApproximationDialog extends javax.swing.JDialog {
                     .generateName();
 
             generator.generateErrorChart(meanSquaredError, plotFileName);
+
+            setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
         } catch (EmptyInputFieldException | IOException ex) {
             Logger.getLogger(ApproximationDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
