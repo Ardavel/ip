@@ -1,6 +1,8 @@
 package ip.ui;
 
+import ip.entities.Driver;
 import ip.entities.Run;
+import ip.facades.DriverJpaController;
 import ip.mock.RandomRunsGenerator;
 import ip.network.MultiLayerNetwork;
 import ip.network.exceptions.CannotCreateNetworkException;
@@ -20,6 +22,7 @@ import ip.ui.plot.PlotNamer;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -43,10 +46,14 @@ public class NetworkDialog extends javax.swing.JDialog {
     private int inputNeurons;
 
     private int outputNeurons;
+    
+    private final Random random = new Random();
 
     private final RunHandler runHandler = new RunHandler();
 
     private final RandomRunsGenerator randomRunsGenerator = new RandomRunsGenerator();
+    
+    private final DriverJpaController driverFacade = new DriverJpaController();
 
     public NetworkDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -287,6 +294,9 @@ public class NetworkDialog extends javax.swing.JDialog {
 
         for (SummarizedRun summarizedRun : randomRuns) {
             Run run = summarizedRun.convertToRun();
+            List<Driver> drivers = driverFacade.findDriverEntities();
+            Driver randomDriver = drivers.get(random.nextInt(drivers.size()));
+            runHandler.handleRun(summarizedRun, randomDriver, safeDrivingDistribution);
             // choose random driver
             // handle run: runHandler.handleRun(summarizedRun, chosen_driver_here, safeDrivingDistribution);
         }

@@ -277,7 +277,7 @@ ALTER SEQUENCE model_id_seq OWNED BY model.id;
 
 CREATE TABLE run (
     id integer NOT NULL,
-    vehicle integer NOT NULL,
+    architecture integer NOT NULL,
     avg_imap double precision NOT NULL,
     ending_time timestamp without time zone NOT NULL
 );
@@ -506,11 +506,11 @@ ALTER TABLE ONLY model
 
 --
 -- TOC entry 1890 (class 2606 OID 17814)
--- Name: run_vehicle_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: run_architecture_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY run
-    ADD CONSTRAINT run_vehicle_fkey FOREIGN KEY (vehicle) REFERENCES vehicle(id);
+    ADD CONSTRAINT run_architecture_fkey FOREIGN KEY (architecture) REFERENCES architecture(id);
 
 
 --
