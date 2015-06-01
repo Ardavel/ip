@@ -296,12 +296,9 @@ public class NetworkDialog extends javax.swing.JDialog {
         List<SummarizedRun> randomRuns = randomRunsGenerator.generateRandomSummarizedRuns(Integer.parseInt(numberOfRuns.getText()));
 
         for (SummarizedRun summarizedRun : randomRuns) {
-            Run run = summarizedRun.convertToRun();
             List<Driver> drivers = driverFacade.findDriverEntities();
             Driver randomDriver = drivers.get(random.nextInt(drivers.size()));
             runHandler.handleRun(summarizedRun, randomDriver, safeDrivingDistribution);
-            // choose random driver
-            // handle run: runHandler.handleRun(summarizedRun, chosen_driver_here, safeDrivingDistribution);
         }
     }//GEN-LAST:event_generateRunsButtonActionPerformed
 
