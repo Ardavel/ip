@@ -161,7 +161,7 @@ ALTER SEQUENCE brand_id_seq OWNED BY brand.id;
 CREATE TABLE driver (
     id integer NOT NULL,
     nickname character varying(20) NOT NULL,
-    vehicle integer NOT NULL,
+    architecture integer NOT NULL,
     eco_points integer DEFAULT 0 NOT NULL,
     safe_points integer DEFAULT 0 NOT NULL
 );
@@ -488,11 +488,11 @@ ALTER TABLE ONLY architecture
 
 --
 -- TOC entry 1885 (class 2606 OID 17746)
--- Name: driver_vehicle_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: driver_architecture_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY driver
-    ADD CONSTRAINT driver_vehicle_fkey FOREIGN KEY (vehicle) REFERENCES vehicle(id);
+    ADD CONSTRAINT driver_architecture_fkey FOREIGN KEY (architecture) REFERENCES architecture(id);
 
 
 --
