@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="ip-ranking" uuid="ad42da47-783c-48e3-9d35-de9ccb2bf782">
+      <secret-storage>master_key</secret-storage>
+      <user-name>ip</user-name>
+      <schema-pattern>ranking.pg_catalog ranking.public</schema-pattern>
+      <default-schemas>ranking.pg_catalog ranking.public</default-schemas>
+    </data-source>
+  </component>
+</project>
