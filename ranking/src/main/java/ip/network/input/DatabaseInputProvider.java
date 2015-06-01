@@ -1,8 +1,10 @@
 package ip.network.input;
 
+import ip.entities.Architecture;
 import ip.entities.Run;
 import ip.facades.RunJpaController;
 import ip.run.RunHandler;
+import ip.scoring.NormalDistribution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,10 @@ import java.util.List;
  * @author Wojciech Szałapski
  */
 public class DatabaseInputProvider implements InputProvider {
+
+    private static final int INPUTS_NUM = 4;
+
+    private static final int OUTPUTS_NUM = 1;
 
     private RunJpaController runJpaController;
 
@@ -29,7 +35,19 @@ public class DatabaseInputProvider implements InputProvider {
     private List<InputRow> convertToInputRows(List<Run> runs) {
         List<InputRow> rows = new ArrayList<>(runs.size());
         for (Run run : runs) {
-            //handler.
+            Architecture arch = run.getArchitecture();
+            NormalDistribution distribution = new NormalDistribution(arch.getMeanImap(), arch.getSdFactorImap(), arch.getRuns());
+            double[] values = new double[INPUTS_NUM];
+            double[] expectedOutput = new double[OUTPUTS_NUM];
+            values[0] = arch.getVehicle().getMass();
+            values[1] = arch.getFuel().getRatio();
+            values[2] = arch.getFuel().getDensity();
+            values[3] = run.getAvgImap();
+
+            expectedOutput[0] = distribution.mapPosition(run.getAvgImap());
+
+            InputRow row = new InputRow(values, expectedOutput);
+            rows.add(row);
         }
         return rows;
     }
