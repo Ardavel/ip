@@ -3,6 +3,8 @@ package ip.network.input;
 import ip.entities.Architecture;
 import ip.entities.Run;
 import ip.facades.RunJpaController;
+import ip.network.normalization.InputNormalizer;
+import ip.network.normalization.MinMaxNormalizer;
 import ip.run.RunHandler;
 import ip.scoring.NormalDistribution;
 
@@ -26,6 +28,8 @@ public class DatabaseInputProvider implements InputProvider {
     private List<InputRow> dataset;
 
     private RunHandler handler = new RunHandler();
+    
+    private InputNormalizer normalizer = new MinMaxNormalizer();
 
     public DatabaseInputProvider() {
         List<Run> runs = runJpaController.findRunEntities();
@@ -59,6 +63,7 @@ public class DatabaseInputProvider implements InputProvider {
 
     @Override
     public InputRow provideInputRow() {
+        normalizer.normalizeInput(dataset.get(nextRow));
         return dataset.get(nextRow++);
     }
 
@@ -67,7 +72,7 @@ public class DatabaseInputProvider implements InputProvider {
         List<InputRow> result = new ArrayList<>();
 
         while (nextRow < dataset.size()) {
-            result.add(dataset.get(nextRow++));
+            result.add(provideInputRow());
         }
 
         return result;
