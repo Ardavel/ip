@@ -105,7 +105,7 @@ public class LearningParamsInputPanel extends javax.swing.JPanel {
 
         maxEpochNumInput.setText("1000");
 
-        errorThresholdInput.setText("0.001");
+        errorThresholdInput.setText("0.0001");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

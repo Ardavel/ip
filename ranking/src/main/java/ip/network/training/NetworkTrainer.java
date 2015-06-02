@@ -63,24 +63,6 @@ public abstract class NetworkTrainer {
         network.getOutputLayer().updateParameters(momentumFactor);
     }
 
-    protected void generateStartingWeights(AbstractNetwork network) {
-        Random random = new Random();
-        generateStartingWeightsForLayer(network.getInputLayer(), random);
-
-        network.getHiddenLayers().stream()
-                .forEach((NeuronLayer hiddenLayer) -> generateStartingWeightsForLayer(hiddenLayer, random));
-        
-        generateStartingWeightsForLayer(network.getOutputLayer(), random);
-    }
-
-    private void generateStartingWeightsForLayer(NeuronLayer layer, Random random) {
-        for (AbstractNeuron neuron : layer.getNeurons()) {
-            neuron.getInputNeurons().stream()
-                    .forEach((NeuronInput input) -> input.setWeight(random.nextDouble() - 0.5));
-            neuron.setBias(random.nextDouble() - 0.5);
-        }
-    }
-
     public double getLearningRate() {
         return learningRate;
     }

@@ -240,8 +240,6 @@ public class NetworkDialog extends javax.swing.JDialog {
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-            // here DatabaseInputProvider should be used
-            //RandomInputProvider provider = new RandomInputProvider(100);
             InputProvider provider = new DatabaseInputProvider();
             List<InputRow> trainingData = provider.provideAllRows();
 
@@ -279,7 +277,7 @@ public class NetworkDialog extends javax.swing.JDialog {
                     new int[]{inputNeurons, hiddenNeurons, outputNeurons}, strategy, true);
             network = factory.createNetwork();
             network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> n.setStrategy(identityStrategy));
-
+            
             JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
                     JOptionPane.INFORMATION_MESSAGE);
 

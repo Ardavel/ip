@@ -26,8 +26,6 @@ public class ThresholdEpochNetworkTrainer extends NetworkTrainer {
 
     @Override
     public List<Double> trainNetwork(AbstractNetwork network, List<InputRow> trainingData) {
-        generateStartingWeights(network);
-        
         List<Double> meanSquaredErrors = new ArrayList<>();
 
         for (int i = 0; i < maximumNumberOfEpochs; ++i) {
