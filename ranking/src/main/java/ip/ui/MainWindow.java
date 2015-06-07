@@ -19,6 +19,7 @@ import ip.scoring.NormalDistribution;
 import ip.ui.exceptions.EmptyInputFieldException;
 import ip.ui.plot.PlotGenerator;
 import ip.ui.plot.PlotNamer;
+import ip.ui.ranking.RankingDialog;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.util.List;
@@ -276,7 +277,7 @@ public class MainWindow extends javax.swing.JFrame {
                     new int[]{inputNeurons, hiddenNeurons, outputNeurons}, strategy, true);
             network = factory.createNetwork();
             network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> n.setStrategy(identityStrategy));
-            
+
             JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
                     JOptionPane.INFORMATION_MESSAGE);
 
@@ -303,7 +304,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_generateRunsButtonActionPerformed
 
     private void rankingButonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rankingButonActionPerformed
-        // TODO add your handling code here:
+        new RankingDialog(this, true);
     }//GEN-LAST:event_rankingButonActionPerformed
 
 
