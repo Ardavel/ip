@@ -31,9 +31,9 @@ import javax.swing.JOptionPane;
  *
  * @author PiotrGrzelak
  */
-public class NetworkDialog extends javax.swing.JDialog {
+public class MainWindow extends javax.swing.JFrame {
 
-    private final static Logger logger = Logger.getLogger(NetworkDialog.class.getName());
+    private final static Logger logger = Logger.getLogger(MainWindow.class.getName());
 
     private final PlotGenerator generator;
 
@@ -55,8 +55,7 @@ public class NetworkDialog extends javax.swing.JDialog {
 
     private final DriverJpaController driverFacade = new DriverJpaController();
 
-    public NetworkDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public MainWindow() {
         generator = new PlotGenerator();
         initComponents();
 
@@ -261,7 +260,7 @@ public class NetworkDialog extends javax.swing.JDialog {
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
         } catch (EmptyInputFieldException | IOException ex) {
-            Logger.getLogger(NetworkDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_trainNetworkButtonActionPerformed
 
