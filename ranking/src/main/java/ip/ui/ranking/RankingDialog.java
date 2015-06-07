@@ -2,7 +2,6 @@ package ip.ui.ranking;
 
 import ip.facades.DriverJpaController;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;

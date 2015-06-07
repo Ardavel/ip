@@ -9,24 +9,28 @@ import java.util.List;
 public class NormalDistribution {
 
     private double mean = 0;
-    
+
     private double standardDeviationFactor = 0;
-    
+
     private double standardDeviation = 0;
-    
+
     private int samples = 0;
 
     public NormalDistribution() {
     }
-    
+
     public NormalDistribution(double mean, double standardDeviationFactor, int samples) {
         this.mean = mean;
         this.standardDeviationFactor = standardDeviationFactor;
         this.samples = samples;
-        
+
+        updateStandardDeviation();
+    }
+
+    public void updateStandardDeviation() {
         standardDeviation = Math.sqrt(standardDeviationFactor / samples);
     }
-    
+
     public void processSample(double sample) {
         ++samples;
         double oldMean = mean;
@@ -34,7 +38,7 @@ public class NormalDistribution {
         standardDeviationFactor += (sample - oldMean) * (sample - mean);
         standardDeviation = Math.sqrt(standardDeviationFactor / samples);
     }
-    
+
     public void initializeFromScratch(List<Double> samplesList) {
         mean = 0;
         samples = samplesList.size();
@@ -42,21 +46,21 @@ public class NormalDistribution {
             mean += sample;
         }
         mean /= samples;
-        
+
         standardDeviation = 0;
         for (Double sample : samplesList) {
             standardDeviation += Math.pow(sample - mean, 2);
         }
         standardDeviation /= samples;
-        
+
         standardDeviationFactor = standardDeviation * standardDeviation * samples;
     }
-    
+
     public double mapPosition(double sample) {
         double minus3Sigma = mean - 3 * standardDeviation;
         double plus3Sigma = mean + 3 * standardDeviation;
         double span = plus3Sigma - minus3Sigma;
-        
+
         return 1 - ((sample - minus3Sigma) / span);
     }
 

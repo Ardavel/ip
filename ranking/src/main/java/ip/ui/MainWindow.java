@@ -14,6 +14,7 @@ import ip.network.strategy.bp.BackPropagationStrategy;
 import ip.network.strategy.bp.IdentityActivationBPS;
 import ip.network.training.ThresholdEpochNetworkTrainer;
 import ip.obd.SummarizedRun;
+import ip.parameters.ParametersManager;
 import ip.run.RunHandler;
 import ip.scoring.NormalDistribution;
 import ip.ui.exceptions.EmptyInputFieldException;
@@ -36,11 +37,13 @@ public class MainWindow extends javax.swing.JFrame {
 
     private final static Logger logger = Logger.getLogger(MainWindow.class.getName());
 
+    private final static ParametersManager parametersManager = ParametersManager.getInstance();
+
     private final PlotGenerator generator;
 
     private MultiLayerNetwork network;
 
-    private NormalDistribution safeDrivingDistribution;
+    private NormalDistribution safeDrivingDistribution = new NormalDistribution();
 
     private int hiddenNeurons;
 
@@ -66,13 +69,18 @@ public class MainWindow extends javax.swing.JFrame {
         networkCreationParamsPanel.fixNetworkOutputField(1);
         networkCreationParamsPanel.setNetworkHiddenField(12);
 
-        initializeSafeDrivingDistribution();
-    }
+        try {
+            parametersManager.deserializeParameters();
+            createNetworkButtonActionPerformed(null);
+            parametersManager.setParametersInNeuralNetwork(network);
+            parametersManager.setParametersInSafetyDistribution(safeDrivingDistribution);
+        } catch (Exception ex) {
+            logger.severe(ex.getMessage());
 
-    private void initializeSafeDrivingDistribution() {
-        safeDrivingDistribution = new NormalDistribution();
-        // here safe driving distribution should be deserialized for the final
-        // version of the project
+            JOptionPane.showMessageDialog(this,
+                    "Nie udało się odczytać parametrów z pliku, nauka zostanie rozpoczęta od nowa", "Nieudany odczyt parametrów",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -260,6 +268,13 @@ public class MainWindow extends javax.swing.JFrame {
 
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
+
+            try {
+                parametersManager.getParametersFromNeuralNetwork(network);
+                parametersManager.serializeParameters();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Wystąpił błąd podczas utrwalania parametrów sieci", "Błąd", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (EmptyInputFieldException | IOException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -278,13 +293,17 @@ public class MainWindow extends javax.swing.JFrame {
             network = factory.createNetwork();
             network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> n.setStrategy(identityStrategy));
 
-            JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
-                    JOptionPane.INFORMATION_MESSAGE);
+            if (evt != null) {
+                JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
 
             trainNetworkButton.setEnabled(true);
-        } catch (EmptyInputFieldException | CannotCreateNetworkException ex) {
+        } catch (EmptyInputFieldException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Nie podano liczb neuronów we wszystkich warstwach", JOptionPane.INFORMATION_MESSAGE);
+        } catch (CannotCreateNetworkException ex) {
             logger.log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Błąd", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Wystąpił błąd podczas tworzenia sieci", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_createNetworkButtonActionPerformed
 
@@ -297,6 +316,14 @@ public class MainWindow extends javax.swing.JFrame {
             List<Driver> drivers = driverFacade.findDriverEntities();
             Driver randomDriver = drivers.get(random.nextInt(drivers.size()));
             runHandler.handleRun(summarizedRun, randomDriver, safeDrivingDistribution);
+        }
+
+        try {
+            parametersManager.getParametersFromSafetyDistribution(safeDrivingDistribution);
+            parametersManager.serializeParameters();
+        } catch (IOException ex) {
+            logger.severe(ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Wystąpił błąd podczas utrwalania wyników nauki", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
 
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
