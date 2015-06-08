@@ -51,6 +51,16 @@ INSERT INTO model (id, name, brand) VALUES (7, 'Focus', 12);
 INSERT INTO model (id, name, brand) VALUES (8, '323F', 18);
 INSERT INTO model (id, name, brand) VALUES (9, 'Astra F', 21);
 INSERT INTO model (id, name, brand) VALUES (10, 'Insignia', 21);
+INSERT INTO model (id, name, brand) VALUES (11, 'F30', 3);
+INSERT INTO model (id, name, brand) VALUES (12, 'E70', 3);
+INSERT INTO model (id, name, brand) VALUES (13, 'C5', 7);
+INSERT INTO model (id, name, brand) VALUES (14, 'C6', 7);
+INSERT INTO model (id, name, brand) VALUES (15, 'Civic IX', 13);
+INSERT INTO model (id, name, brand) VALUES (16, 'Insight', 13);
+INSERT INTO model (id, name, brand) VALUES (17, 'Qashqai', 20);
+INSERT INTO model (id, name, brand) VALUES (18, 'Tiida', 20);
+INSERT INTO model (id, name, brand) VALUES (19, 'Megane', 24);
+INSERT INTO model (id, name, brand) VALUES (20, 'Laguna', 24);
 
 --Samochody
 
@@ -66,6 +76,19 @@ INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (9, 7, 1217, 
 INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (10, 7, 1217, 1988, 131);
 INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (11, 7, 1217, 1988, 173);
 INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (12, 7, 1217, 2261, 150);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (13, 9, 1274, 1389, 82);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (14, 9, 1274, 1598, 75);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (15, 9, 1274, 1794, 116);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (16, 9, 1274, 1998, 136);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (17, 14, 1844, 2946, 211);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (18, 14, 1844, 2179, 170); --DIESEL
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (19, 14, 1844, 2729, 204); --DIESEL
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (20, 14, 1844, 2992, 241); --DIESEL
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (21, 20, 1255, 1794, 95);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (22, 20, 1255, 1998, 113);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (23, 20, 1255, 2963, 167);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (24, 20, 1255, 2946, 190);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (25, 20, 1255, 2188, 83); --DIESEL
 
 --Architektury
 
@@ -81,15 +104,47 @@ INSERT INTO architecture (id, vehicle, fuel) VALUES (9, 9, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (10, 10, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (11, 11, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (12, 12, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (13, 13, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (14, 14, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (15, 15, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (16, 16, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (17, 17, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (18, 18, 2);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (19, 19, 2);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (20, 20, 2);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (21, 21, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (22, 22, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (23, 23, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (24, 24, 1);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (25, 25, 2);
 
 --Kierowcy
 
 INSERT INTO driver (id, nickname, architecture) VALUES (1, 'Driver1 Arch1', 1);
 INSERT INTO driver (id, nickname, architecture) VALUES (2, 'Driver2 Arch2', 2);
-INSERT INTO driver (id, nickname, architecture) VALUES (3, 'Driver3 Arch7', 7);
-INSERT INTO driver (id, nickname, architecture) VALUES (4, 'Driver4 Arch10', 10);
-INSERT INTO driver (id, nickname, architecture) VALUES (5, 'Driver5 Arch1', 1);
-INSERT INTO driver (id, nickname, architecture) VALUES (6, 'Driver6 Arch1', 1);
+INSERT INTO driver (id, nickname, architecture) VALUES (3, 'Driver3 Arch3', 3);
+INSERT INTO driver (id, nickname, architecture) VALUES (4, 'Driver4 Arch4', 4);
+INSERT INTO driver (id, nickname, architecture) VALUES (5, 'Driver5 Arch5', 5);
+INSERT INTO driver (id, nickname, architecture) VALUES (6, 'Driver6 Arch6', 6);
+INSERT INTO driver (id, nickname, architecture) VALUES (7, 'Driver7 Arch7', 7);
+INSERT INTO driver (id, nickname, architecture) VALUES (8, 'Driver8 Arch8', 8);
+INSERT INTO driver (id, nickname, architecture) VALUES (9, 'Driver9 Arch9', 9);
+INSERT INTO driver (id, nickname, architecture) VALUES (10, 'Driver10 Arch10', 10);
+INSERT INTO driver (id, nickname, architecture) VALUES (11, 'Driver11 Arch11', 11);
+INSERT INTO driver (id, nickname, architecture) VALUES (12, 'Driver12 Arch12', 12);
+INSERT INTO driver (id, nickname, architecture) VALUES (13, 'Driver13 Arch13', 13);
+INSERT INTO driver (id, nickname, architecture) VALUES (14, 'Driver14 Arch14', 14);
+INSERT INTO driver (id, nickname, architecture) VALUES (15, 'Driver15 Arch15', 15);
+INSERT INTO driver (id, nickname, architecture) VALUES (16, 'Driver16 Arch16', 16);
+INSERT INTO driver (id, nickname, architecture) VALUES (17, 'Driver17 Arch17', 17);
+INSERT INTO driver (id, nickname, architecture) VALUES (18, 'Driver18 Arch18', 18);
+INSERT INTO driver (id, nickname, architecture) VALUES (19, 'Driver19 Arch19', 19);
+INSERT INTO driver (id, nickname, architecture) VALUES (20, 'Driver20 Arch20', 20);
+INSERT INTO driver (id, nickname, architecture) VALUES (21, 'Driver21 Arch21', 21);
+INSERT INTO driver (id, nickname, architecture) VALUES (22, 'Driver22 Arch22', 22);
+INSERT INTO driver (id, nickname, architecture) VALUES (23, 'Driver23 Arch23', 23);
+INSERT INTO driver (id, nickname, architecture) VALUES (24, 'Driver24 Arch24', 24);
+INSERT INTO driver (id, nickname, architecture) VALUES (25, 'Driver25 Arch25', 25);
 
 
 
