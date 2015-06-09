@@ -5,7 +5,6 @@ import ip.network.neuron.AbstractNeuron;
 import ip.network.neuron.NeuronInput;
 import ip.scoring.NormalDistribution;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -17,8 +16,6 @@ import java.util.logging.Logger;
  * @author Wojciech Szałapski
  */
 public class ParametersManager {
-
-    private final static Logger logger = Logger.getLogger(ParametersManager.class.getName());
 
     private final String FILE_NAME = "parameters.txt";
 

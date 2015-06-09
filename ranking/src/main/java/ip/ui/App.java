@@ -26,9 +26,9 @@ public class App {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
 
-        MainWindow approximationDialog = new MainWindow();
-        WindowUtils.centerWindow(approximationDialog);
-        approximationDialog.setVisible(true);
+        MainWindow mainWindow = new MainWindow();
+        WindowUtils.centerWindow(mainWindow);
+        mainWindow.setVisible(true);
 
     }
 

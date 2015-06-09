@@ -34,52 +34,56 @@ import javax.swing.JOptionPane;
  * @author PiotrGrzelak
  */
 public class MainWindow extends javax.swing.JFrame {
-
+    
     private final static Logger logger = Logger.getLogger(MainWindow.class.getName());
-
+    
     private final static ParametersManager parametersManager = ParametersManager.getInstance();
-
+    
     private final PlotGenerator generator;
-
+    
     private MultiLayerNetwork network;
-
+    
     private NormalDistribution safeDrivingDistribution = new NormalDistribution();
-
+    
     private int hiddenNeurons;
-
+    
     private int inputNeurons;
-
+    
     private int outputNeurons;
-
+    
     private final Random random = new Random();
-
+    
     private final RunHandler runHandler = new RunHandler();
-
+    
     private final RandomRunsGenerator randomRunsGenerator = new RandomRunsGenerator();
-
+    
     private final DriverJpaController driverFacade = new DriverJpaController();
-
+    
     public MainWindow() {
         generator = new PlotGenerator();
         initComponents();
-
+        
         setTitle("Rankingowanie kierowców");
-
+        
         networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
         networkCreationParamsPanel.setNetworkHiddenField(12);
-
+        
         try {
             parametersManager.deserializeParameters();
             createNetworkButtonActionPerformed(null);
             parametersManager.setParametersInNeuralNetwork(network);
             parametersManager.setParametersInSafetyDistribution(safeDrivingDistribution);
         } catch (Exception ex) {
-            logger.severe(ex.getMessage());
-
             JOptionPane.showMessageDialog(this,
-                    "Nie udało się odczytać parametrów z pliku, nauka zostanie rozpoczęta od nowa", "Nieudany odczyt parametrów",
+                    "Nie znaleziono poprawnego pliku z parametrami. Należy utworzyć sieć i rozpocząć naukę od nowa",
+                    "Brak zapisanych parametrów",
                     JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        if (network == null) {
+            trainNetworkButton.setEnabled(false);
+            generateRunsButton.setEnabled(false);
         }
     }
 
@@ -244,31 +248,34 @@ public class MainWindow extends javax.swing.JFrame {
         if (network == null) {
             return;
         }
-
+        
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+            
             InputProvider provider = new DatabaseInputProvider();
             List<InputRow> trainingData = provider.provideAllRows();
-
+            
             int maxEpochNum = learningParamsInputPanel.getMaximumEpochNumber();
             double learningRate = learningParamsInputPanel.getLearningRate();
             double momentumFactor = learningParamsInputPanel.getMomentumFactor();
             double error = learningParamsInputPanel.getErrorThreshold();
-
+            
             ThresholdEpochNetworkTrainer trainer
                     = new ThresholdEpochNetworkTrainer(maxEpochNum, error, learningRate, momentumFactor);
             List<Double> meanSquaredError = trainer.trainNetwork(network, trainingData);
-
+            
+            logger.info("Końcowy błąd po treningu " + meanSquaredError.get(meanSquaredError.size() - 1)
+                    + "\nLiczba epok: " + meanSquaredError.size());
+            
             String plotFileName = new PlotNamer().setBaseName("error").setEpochs(meanSquaredError.size()).setHiddenNeurons(hiddenNeurons)
                     .setLearningRate(learningRate).setMomentumFactor(momentumFactor)
                     .generateName();
-
+            
             generator.generateErrorChart(meanSquaredError, plotFileName);
-
+            
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
-
+            
             try {
                 parametersManager.getParametersFromNeuralNetwork(network);
                 parametersManager.serializeParameters();
@@ -285,20 +292,21 @@ public class MainWindow extends javax.swing.JFrame {
             inputNeurons = networkCreationParamsPanel.getNetworkInputsNum();
             outputNeurons = networkCreationParamsPanel.getNetworkOutputsNum();
             hiddenNeurons = networkCreationParamsPanel.getHiddenNeuronsNum();
-
+            
             BackPropagationStrategy strategy = BackPropagationStrategy.getInstance();
             IdentityActivationBPS identityStrategy = IdentityActivationBPS.getInstance();
             MultiLayerNetworkFactory factory = new MultiLayerNetworkFactory(
                     new int[]{inputNeurons, hiddenNeurons, outputNeurons}, strategy, true);
             network = factory.createNetwork();
             network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> n.setStrategy(identityStrategy));
-
+            
             if (evt != null) {
                 JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-
+            
             trainNetworkButton.setEnabled(true);
+            generateRunsButton.setEnabled(true);
         } catch (EmptyInputFieldException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Nie podano liczb neuronów we wszystkich warstwach", JOptionPane.INFORMATION_MESSAGE);
         } catch (CannotCreateNetworkException ex) {
@@ -309,15 +317,15 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void generateRunsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRunsButtonActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+        
         List<SummarizedRun> randomRuns = randomRunsGenerator.generateRandomSummarizedRuns(Integer.parseInt(numberOfRuns.getText()));
-
+        
         for (SummarizedRun summarizedRun : randomRuns) {
             List<Driver> drivers = driverFacade.findDriverEntities();
             Driver randomDriver = drivers.get(random.nextInt(drivers.size()));
             runHandler.handleRun(summarizedRun, randomDriver, safeDrivingDistribution);
         }
-
+        
         try {
             parametersManager.getParametersFromSafetyDistribution(safeDrivingDistribution);
             parametersManager.serializeParameters();
@@ -325,7 +333,7 @@ public class MainWindow extends javax.swing.JFrame {
             logger.severe(ex.getMessage());
             JOptionPane.showMessageDialog(this, "Wystąpił błąd podczas utrwalania wyników nauki", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
-
+        
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         JOptionPane.showMessageDialog(this, "Trasy zostały wygenerowane", "Wygenerowano trasy", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_generateRunsButtonActionPerformed
