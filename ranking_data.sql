@@ -61,6 +61,9 @@ INSERT INTO model (id, name, brand) VALUES (17, 'Qashqai', 20);
 INSERT INTO model (id, name, brand) VALUES (18, 'Tiida', 20);
 INSERT INTO model (id, name, brand) VALUES (19, 'Megane', 24);
 INSERT INTO model (id, name, brand) VALUES (20, 'Laguna', 24);
+INSERT INTO model (id, name, brand) VALUES (21, 'Viano', 19);
+INSERT INTO model (id, name, brand) VALUES (22, 'E71', 3);
+INSERT INTO model (id, name, brand) VALUES (23, 'Sorento', 16);
 
 --Samochody
 
@@ -89,6 +92,16 @@ INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (22, 20, 1255
 INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (23, 20, 1255, 2963, 167);
 INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (24, 20, 1255, 2946, 190);
 INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (25, 20, 1255, 2188, 83); --DIESEL
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (26, 21, 1962, 2990, 204);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (27, 21, 1962, 2200, 160); --DIESEL
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (28, 22, 2165, 2979, 306);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (29, 22, 2165, 4395, 407);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (30, 22, 2165, 4395, 485);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (31, 22, 2165, 4395, 555);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (32, 23, 1986, 2351, 139);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (33, 23, 1986, 3497, 195);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (34, 23, 1986, 3778, 266);
+INSERT INTO vehicle (id, model, mass, engine_volume, power) VALUES (35, 23, 1986, 2497, 140); --DIESEL
 
 --Architektury
 
@@ -117,6 +130,16 @@ INSERT INTO architecture (id, vehicle, fuel) VALUES (22, 22, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (23, 23, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (24, 24, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (25, 25, 2);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (26, 26, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (27, 27, 2); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (28, 28, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (29, 29, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (30, 30, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (31, 31, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (32, 32, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (33, 33, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (34, 34, 1); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (35, 35, 2); 
 
 --Kierowcy
 
@@ -145,6 +168,15 @@ INSERT INTO driver (id, nickname, architecture) VALUES (22, 'Driver22 Arch22', 2
 INSERT INTO driver (id, nickname, architecture) VALUES (23, 'Driver23 Arch23', 23);
 INSERT INTO driver (id, nickname, architecture) VALUES (24, 'Driver24 Arch24', 24);
 INSERT INTO driver (id, nickname, architecture) VALUES (25, 'Driver25 Arch25', 25);
-
+INSERT INTO driver (id, nickname, architecture) VALUES (26, 'Driver26 Arch26', 26);
+INSERT INTO driver (id, nickname, architecture) VALUES (27, 'Driver27 Arch27', 27);
+INSERT INTO driver (id, nickname, architecture) VALUES (28, 'Driver28 Arch28', 28);
+INSERT INTO driver (id, nickname, architecture) VALUES (29, 'Driver29 Arch29', 29);
+INSERT INTO driver (id, nickname, architecture) VALUES (30, 'Driver30 Arch30', 30);
+INSERT INTO driver (id, nickname, architecture) VALUES (31, 'Driver31 Arch31', 31);
+INSERT INTO driver (id, nickname, architecture) VALUES (32, 'Driver32 Arch32', 32);
+INSERT INTO driver (id, nickname, architecture) VALUES (33, 'Driver33 Arch33', 33);
+INSERT INTO driver (id, nickname, architecture) VALUES (34, 'Driver34 Arch34', 34);
+INSERT INTO driver (id, nickname, architecture) VALUES (35, 'Driver35 Arch35', 35);
 
 
