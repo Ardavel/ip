@@ -140,6 +140,12 @@ INSERT INTO architecture (id, vehicle, fuel) VALUES (32, 32, 1);
 INSERT INTO architecture (id, vehicle, fuel) VALUES (33, 33, 1); 
 INSERT INTO architecture (id, vehicle, fuel) VALUES (34, 34, 1); 
 INSERT INTO architecture (id, vehicle, fuel) VALUES (35, 35, 2); 
+INSERT INTO architecture (id, vehicle, fuel) VALUES (36, 17, 3);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (37, 18, 3);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (38, 14, 3);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (39, 15, 3);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (40, 24, 3);
+INSERT INTO architecture (id, vehicle, fuel) VALUES (41, 25, 3);
 
 --Kierowcy
 
@@ -178,5 +184,11 @@ INSERT INTO driver (id, nickname, architecture) VALUES (32, 'Driver32 Arch32', 3
 INSERT INTO driver (id, nickname, architecture) VALUES (33, 'Driver33 Arch33', 33);
 INSERT INTO driver (id, nickname, architecture) VALUES (34, 'Driver34 Arch34', 34);
 INSERT INTO driver (id, nickname, architecture) VALUES (35, 'Driver35 Arch35', 35);
+INSERT INTO driver (id, nickname, architecture) VALUES (36, 'Driver36 Arch36', 36);
+INSERT INTO driver (id, nickname, architecture) VALUES (37, 'Driver37 Arch37', 37);
+INSERT INTO driver (id, nickname, architecture) VALUES (38, 'Driver38 Arch38', 38);
+INSERT INTO driver (id, nickname, architecture) VALUES (39, 'Driver39 Arch39', 39);
+INSERT INTO driver (id, nickname, architecture) VALUES (40, 'Driver40 Arch40', 40);
+INSERT INTO driver (id, nickname, architecture) VALUES (41, 'Driver41 Arch41', 41);
 
 
