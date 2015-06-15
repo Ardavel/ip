@@ -14,6 +14,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -31,6 +33,12 @@ public class PlotGenerator {
     private int errorChartId = 1;
 
     private int dataChartId = 1;
+    
+    private int errorDatasetIndex;
+    
+    private JFreeChart chart;
+    
+    private XYPlot errorPlot;
 
     public PlotGenerator(int chartWidth, int chartHeight) {
         this.chartWidth = chartWidth;
@@ -41,8 +49,8 @@ public class PlotGenerator {
         this(1024, 768);
     }
 
-    public void generateErrorChart(List<Double> errors, String plotFileName) throws IOException {
-        XYSeries data = new XYSeries("Errors");
+    public void generateErrorChart(List<Double> errors) throws IOException {
+        XYSeries data = new XYSeries("10 neurons");
 
         for (int i = 1; i <= errors.size(); ++i) {
             data.add(i, errors.get(i - 1));
@@ -50,18 +58,32 @@ public class PlotGenerator {
 
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(data);
-        JFreeChart chart = ChartFactory.createXYLineChart("Squared error", "Epoch number", "Squared Error", dataset, PlotOrientation.VERTICAL, false, true, true);
+        chart = ChartFactory.createXYLineChart("Squared error", "Epoch number", "Squared Error", dataset, PlotOrientation.VERTICAL, true, true, true);
+        errorPlot = chart.getXYPlot();
+        errorDatasetIndex = 1;
+        
+        StandardXYItemRenderer renderer = new StandardXYItemRenderer();
+        errorPlot.setRenderer(renderer);        
+    }
+    
+    public void addErrorSeries(List<Double> errors){
+        XYSeries data = new XYSeries((10 + errorDatasetIndex) + " neurons");
 
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesLinesVisible(0, false);
-        chart.getXYPlot().setRenderer(renderer);
-
+        for (int i = 1; i <= errors.size(); ++i) {
+            data.add(i, errors.get(i - 1));
+        }
+        
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(data);
+        
+        errorPlot.setDataset(errorDatasetIndex, dataset);
+        errorPlot.setRenderer(errorDatasetIndex, new StandardXYItemRenderer());
+        errorDatasetIndex++;
+    }
+    
+    public void saveErrorChart(String plotFileName) throws IOException{
         File XYChart = new File(plotFileName);
         ChartUtilities.saveChartAsJPEG(XYChart, chart, chartWidth, chartHeight);
-    }
-
-    public void generateErrorChart(List<Double> errors) throws IOException {
-        generateErrorChart(errors, "errorChart" + (errorChartId++) + ".png");
     }
 
     public void generateResultsChart(ResultsPlotData data, String fileName) throws IOException {

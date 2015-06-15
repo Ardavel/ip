@@ -34,41 +34,41 @@ import javax.swing.JOptionPane;
  * @author PiotrGrzelak
  */
 public class MainWindow extends javax.swing.JFrame {
-    
+
     private final static Logger logger = Logger.getLogger(MainWindow.class.getName());
-    
+
     private final static ParametersManager parametersManager = ParametersManager.getInstance();
-    
+
     private final PlotGenerator generator;
-    
+
     private MultiLayerNetwork network;
-    
+
     private NormalDistribution safeDrivingDistribution = new NormalDistribution();
-    
+
     private int hiddenNeurons;
-    
+
     private int inputNeurons;
-    
+
     private int outputNeurons;
-    
+
     private final Random random = new Random();
-    
+
     private final RunHandler runHandler = new RunHandler();
-    
+
     private final RandomRunsGenerator randomRunsGenerator = new RandomRunsGenerator();
-    
+
     private final DriverJpaController driverFacade = new DriverJpaController();
-    
+
     public MainWindow() {
         generator = new PlotGenerator();
         initComponents();
-        
+
         setTitle("Rankingowanie kierowców");
-        
+
         networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
         networkCreationParamsPanel.setNetworkHiddenField(12);
-        
+
         try {
             parametersManager.deserializeParameters();
             createNetworkButtonActionPerformed(null);
@@ -80,7 +80,7 @@ public class MainWindow extends javax.swing.JFrame {
                     "Brak zapisanych parametrów",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-        
+
         if (network == null) {
             trainNetworkButton.setEnabled(false);
             generateRunsButton.setEnabled(false);
@@ -114,6 +114,7 @@ public class MainWindow extends javax.swing.JFrame {
         rankingPanel = new javax.swing.JPanel();
         rankingButon = new javax.swing.JButton();
         rankingSeparator = new javax.swing.JSeparator();
+        testHiddenNeurons = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Aproksymacja");
@@ -194,6 +195,13 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(rankingButon)
         );
 
+        testHiddenNeurons.setText("Testuj ukryte neurony");
+        testHiddenNeurons.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                testHiddenNeuronsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -208,7 +216,10 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(networkCreationParamsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(createNetworkPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(networkCreationSeparator))
-                    .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(testHiddenNeurons)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(runsGeneratorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(rankingPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -227,8 +238,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(networkCreationSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(learningParamsInputPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(testHiddenNeurons)
+                        .addGap(48, 48, 48)))
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(networkSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -248,34 +264,43 @@ public class MainWindow extends javax.swing.JFrame {
         if (network == null) {
             return;
         }
-        
+
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            
+
             InputProvider provider = new DatabaseInputProvider();
             List<InputRow> trainingData = provider.provideAllRows();
-            
+
             int maxEpochNum = learningParamsInputPanel.getMaximumEpochNumber();
             double learningRate = learningParamsInputPanel.getLearningRate();
             double momentumFactor = learningParamsInputPanel.getMomentumFactor();
             double error = learningParamsInputPanel.getErrorThreshold();
-            
+
             ThresholdEpochNetworkTrainer trainer
                     = new ThresholdEpochNetworkTrainer(maxEpochNum, error, learningRate, momentumFactor);
             List<Double> meanSquaredError = trainer.trainNetwork(network, trainingData);
-            
-            logger.info("Końcowy błąd po treningu " + meanSquaredError.get(meanSquaredError.size() - 1)
+
+            logger.info("Liczba neuronów w warstwie ukrytej: " + hiddenNeurons
+                    + "\nKońcowy błąd po treningu " + meanSquaredError.get(meanSquaredError.size() - 1)
                     + "\nLiczba epok: " + meanSquaredError.size());
-            
+
             String plotFileName = new PlotNamer().setBaseName("error").setEpochs(meanSquaredError.size()).setHiddenNeurons(hiddenNeurons)
                     .setLearningRate(learningRate).setMomentumFactor(momentumFactor)
                     .generateName();
-            
-            generator.generateErrorChart(meanSquaredError, plotFileName);
-            
+
+            if(!errorChartAlreadyCreated){
+                generator.generateErrorChart(meanSquaredError);
+                errorChartAlreadyCreated = true;
+            }
+            else{
+                generator.addErrorSeries(meanSquaredError);
+            }
+
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-            JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
-            
+            if (evt != null) {
+                JOptionPane.showMessageDialog(this, "Trening sieci zakończony", "Trening zakończony", JOptionPane.INFORMATION_MESSAGE);
+            }
+
             try {
                 parametersManager.getParametersFromNeuralNetwork(network);
                 parametersManager.serializeParameters();
@@ -291,20 +316,21 @@ public class MainWindow extends javax.swing.JFrame {
         try {
             inputNeurons = networkCreationParamsPanel.getNetworkInputsNum();
             outputNeurons = networkCreationParamsPanel.getNetworkOutputsNum();
-            hiddenNeurons = networkCreationParamsPanel.getHiddenNeuronsNum();
-            
+            //hiddenNeurons = networkCreationParamsPanel.getHiddenNeuronsNum();
+            hiddenNeurons = actualHiddenNeuronsCount;
+
             BackPropagationStrategy strategy = BackPropagationStrategy.getInstance();
             IdentityActivationBPS identityStrategy = IdentityActivationBPS.getInstance();
             MultiLayerNetworkFactory factory = new MultiLayerNetworkFactory(
                     new int[]{inputNeurons, hiddenNeurons, outputNeurons}, strategy, true);
             network = factory.createNetwork();
             network.getOutputLayer().getNeurons().stream().forEach((AbstractNeuron n) -> n.setStrategy(identityStrategy));
-            
+
             if (evt != null) {
                 JOptionPane.showMessageDialog(this, "Tworzenie sieci zakończone sukcesem", "Sukces",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-            
+
             trainNetworkButton.setEnabled(true);
             generateRunsButton.setEnabled(true);
         } catch (EmptyInputFieldException ex) {
@@ -317,15 +343,15 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void generateRunsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateRunsButtonActionPerformed
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        
+
         List<SummarizedRun> randomRuns = randomRunsGenerator.generateRandomSummarizedRuns(Integer.parseInt(numberOfRuns.getText()));
-        
+
         for (SummarizedRun summarizedRun : randomRuns) {
             List<Driver> drivers = driverFacade.findDriverEntities();
             Driver randomDriver = drivers.get(random.nextInt(drivers.size()));
             runHandler.handleRun(summarizedRun, randomDriver, safeDrivingDistribution);
         }
-        
+
         try {
             parametersManager.getParametersFromSafetyDistribution(safeDrivingDistribution);
             parametersManager.serializeParameters();
@@ -333,7 +359,7 @@ public class MainWindow extends javax.swing.JFrame {
             logger.severe(ex.getMessage());
             JOptionPane.showMessageDialog(this, "Wystąpił błąd podczas utrwalania wyników nauki", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         JOptionPane.showMessageDialog(this, "Trasy zostały wygenerowane", "Wygenerowano trasy", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_generateRunsButtonActionPerformed
@@ -342,6 +368,21 @@ public class MainWindow extends javax.swing.JFrame {
         new RankingDialog(this, true);
     }//GEN-LAST:event_rankingButonActionPerformed
 
+    private void testHiddenNeuronsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testHiddenNeuronsActionPerformed
+        int hiddenNeuronsCount = 20;
+        for (actualHiddenNeuronsCount = 10; actualHiddenNeuronsCount < hiddenNeuronsCount; actualHiddenNeuronsCount++) {
+            createNetworkButtonActionPerformed(null);
+            trainNetworkButtonActionPerformed(null);
+        }
+        try {
+            generator.saveErrorChart("HiddenNeurons.png");
+        } catch (IOException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_testHiddenNeuronsActionPerformed
+
+    private int actualHiddenNeuronsCount;
+    private boolean errorChartAlreadyCreated;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
@@ -361,6 +402,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel rankingPanel;
     private javax.swing.JSeparator rankingSeparator;
     private javax.swing.JPanel runsGeneratorPanel;
+    private javax.swing.JButton testHiddenNeurons;
     private javax.swing.JButton trainNetworkButton;
     // End of variables declaration//GEN-END:variables
 }
