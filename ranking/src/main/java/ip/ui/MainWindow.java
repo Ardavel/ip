@@ -23,6 +23,7 @@ import ip.ui.plot.PlotNamer;
 import ip.ui.ranking.RankingDialog;
 import java.awt.Cursor;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -281,6 +282,7 @@ public class MainWindow extends javax.swing.JFrame {
             List<Double> meanSquaredError = trainer.trainNetwork(network, trainingData);
 
             logger.info("Liczba neuronów w warstwie ukrytej: " + hiddenNeurons
+                    + "\nIteracja: " + actualIteration
                     + "\nKońcowy błąd po treningu " + meanSquaredError.get(meanSquaredError.size() - 1)
                     + "\nLiczba epok: " + meanSquaredError.size());
 
@@ -288,13 +290,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .setLearningRate(learningRate).setMomentumFactor(momentumFactor)
                     .generateName();
 
-            if(!errorChartAlreadyCreated){
-                generator.generateErrorChart(meanSquaredError);
-                errorChartAlreadyCreated = true;
-            }
-            else{
-                generator.addErrorSeries(meanSquaredError);
-            }
+            allErrors.get(actualHiddenNeuronsCount - minimumHiddenNeuronsCount).set(actualIteration, meanSquaredError);
 
             setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             if (evt != null) {
@@ -307,7 +303,7 @@ public class MainWindow extends javax.swing.JFrame {
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Wystąpił błąd podczas utrwalania parametrów sieci", "Błąd", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (EmptyInputFieldException | IOException ex) {
+        } catch (EmptyInputFieldException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_trainNetworkButtonActionPerformed
@@ -369,10 +365,52 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_rankingButonActionPerformed
 
     private void testHiddenNeuronsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testHiddenNeuronsActionPerformed
-        int hiddenNeuronsCount = 20;
-        for (actualHiddenNeuronsCount = 10; actualHiddenNeuronsCount < hiddenNeuronsCount; actualHiddenNeuronsCount++) {
-            createNetworkButtonActionPerformed(null);
-            trainNetworkButtonActionPerformed(null);
+        allErrors = new ArrayList<>(); //x neuronów ukrytych
+        for (int i = minimumHiddenNeuronsCount; i < hiddenNeuronsCount; i++) {
+            allErrors.add(new ArrayList<>()); //Każda liczba neuronów ukrytych ma x iteracji
+            for (int j = 0; j < iterations; j++) {
+                allErrors.get(i - minimumHiddenNeuronsCount).add(new ArrayList<>()); //Każda iteracja ma x epok
+            }
+        }
+
+        for (actualHiddenNeuronsCount = minimumHiddenNeuronsCount; actualHiddenNeuronsCount < hiddenNeuronsCount; actualHiddenNeuronsCount++) {
+            int maxEpoch = 0;
+            for (actualIteration = 0; actualIteration < iterations; actualIteration++) {
+                createNetworkButtonActionPerformed(null);
+                trainNetworkButtonActionPerformed(null);
+                if (allErrors.get(actualHiddenNeuronsCount - minimumHiddenNeuronsCount).get(actualIteration).size() > maxEpoch) {
+                    //Dla danej liczby neuronów ukrytej i wszystkich iteracji szukamy maksymalnej liczby epok
+                    maxEpoch = allErrors.get(actualHiddenNeuronsCount - minimumHiddenNeuronsCount).get(actualIteration).size();
+                }
+            }
+
+            List<Double> averageError = new ArrayList<>();
+            double averageEpochError = 0;
+            for (int epoch = 0; epoch < maxEpoch; epoch++) {
+                for (actualIteration = 0; actualIteration < iterations; actualIteration++) {
+                    try {
+                        averageEpochError += allErrors.get(actualHiddenNeuronsCount - minimumHiddenNeuronsCount).get(actualIteration).get(epoch);
+                    } catch (IndexOutOfBoundsException ex) {
+                        //CATCH THEM ALL!
+                    }
+                }
+                averageEpochError /= iterations;
+                if (epoch == maxEpoch - 1) {
+                    System.out.println("Średni błąd dla: " + actualHiddenNeuronsCount + " neuronow i epoki: " + epoch + " wynosi: " + averageEpochError);
+                }
+                averageError.add(averageEpochError);
+            }
+
+            if (!errorChartAlreadyCreated) {
+                try {
+                    generator.generateErrorChart(averageError);
+                    errorChartAlreadyCreated = true;
+                } catch (IOException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                generator.addErrorSeries(averageError);
+            }
         }
         try {
             generator.saveErrorChart("HiddenNeurons.png");
@@ -381,8 +419,15 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_testHiddenNeuronsActionPerformed
 
+    private int hiddenNeuronsCount = 20;
+    public static int minimumHiddenNeuronsCount = 12;
     private int actualHiddenNeuronsCount;
     private boolean errorChartAlreadyCreated;
+
+    //Lista dla każdej liczby neuronów dla każdej iteracji dla każdej epoki
+    private List<List<List<Double>>> allErrors;
+    private int iterations = 10;
+    private int actualIteration;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
