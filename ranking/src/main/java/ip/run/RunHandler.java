@@ -30,7 +30,8 @@ public class RunHandler {
     public void handleRun(SummarizedRun summarizedRun, Driver driver, NormalDistribution safeDrivingDistribution) {
         safeDrivingDistribution.processSample(summarizedRun.getSafetyPenaltyPerKm());
         double safetyPosition = safeDrivingDistribution.mapPosition(summarizedRun.getSafetyPenaltyPerKm());
-        int safetyScore = (int) scoreCalculator.calculatePoints(safetyPosition);
+        int safetyScore = (int) (scoreCalculator.calculatePoints(safetyPosition)
+                * summarizedRun.getDistance() / 10);
 
         Architecture driverArchitecture = driver.getArchitecture();
         NormalDistribution ecoDrivingDistribution = new NormalDistribution(driverArchitecture.getMeanImap(), driverArchitecture.getSdFactorImap(), driverArchitecture.getRuns());
