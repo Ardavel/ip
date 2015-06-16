@@ -67,7 +67,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         networkCreationParamsPanel.fixNetworkInputsField(6);
         networkCreationParamsPanel.fixNetworkOutputField(1);
-        networkCreationParamsPanel.setNetworkHiddenField(12);
+        networkCreationParamsPanel.setNetworkHiddenField(17);
         
         try {
             parametersManager.deserializeParameters();
